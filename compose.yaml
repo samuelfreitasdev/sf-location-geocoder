@@ -1,0 +1,11 @@
+services:
+  db:
+    image: 'postgres:alpine'
+    shm_size: 128mb
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      POSTGRES_DB: 'sf-location-geocoder'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'

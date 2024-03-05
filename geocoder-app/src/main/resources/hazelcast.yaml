@@ -1,0 +1,5 @@
+hazelcast:
+  instance-name: geocoder
+  cluster-name: geocoder-cluster
+  jet:
+    enabled: true
