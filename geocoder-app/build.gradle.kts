@@ -9,6 +9,10 @@ plugins {
 	alias(libs.plugins.jib)
 }
 
+//test {
+//	useJUnitPlatform()
+//}
+
 dependencies {
 
 	implementation(project(":geocoder-core"))
@@ -26,12 +30,18 @@ dependencies {
 	implementation(libs.bundles.jooq)
 	implementation(libs.bundles.jackson)
 
-	runtimeOnly(libs.spring.compose)
+	annotationProcessor(libs.spring.annotations)
+	developmentOnly(libs.spring.devtools)
+	developmentOnly(libs.spring.compose)
+
+	runtimeOnly(libs.netty.resolver.dns.native.macos)
 	runtimeOnly(libs.slf4j)
 	runtimeOnly(libs.pg.r2dbc)
 	runtimeOnly(libs.pg.jdbc)
 
-	testImplementation(libs.spring.test)
+	testImplementation(libs.bundles.spring.test)
+	testImplementation(libs.bundles.junit)
+	testImplementation(libs.bundles.testcontainers)
 }
 
 tasks {

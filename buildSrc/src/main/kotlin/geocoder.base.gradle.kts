@@ -35,6 +35,10 @@ tasks {
         }
     }
 
+	withType<Test> {
+		useJUnitPlatform()
+	}
+
     register<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
         archiveExtension.set("jar")

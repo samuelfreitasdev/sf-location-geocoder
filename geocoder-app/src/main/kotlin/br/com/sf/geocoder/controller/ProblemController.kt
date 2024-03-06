@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.net.URI
 
 @RestController
 @RequestMapping("/api/problems")
@@ -35,7 +36,7 @@ class ProblemController(val repo: GeocoderProblemPort) {
 	@PostMapping("", produces = [MediaType.APPLICATION_JSON_VALUE])
 	suspend fun create(@RequestBody problem: GeocoderProblem): ResponseEntity<Void> {
 		return repo.create(problem)
-			.let { ResponseEntity.ok().build() }
+			.let { ResponseEntity.created(URI.create("/api/problems/${problem.id}")).build() }
 	}
 
 	@PostMapping("/{id}/copy", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -50,7 +51,7 @@ class ProblemController(val repo: GeocoderProblemPort) {
 			.let { ResponseEntity.ok().build() }
 	}
 
-	@DeleteMapping("/{id}/remove", produces = [MediaType.APPLICATION_JSON_VALUE])
+	@DeleteMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
 	suspend fun remove(@PathVariable id: Long): ResponseEntity<Void> {
 		return repo.deleteById(id)
 			.let { ResponseEntity.ok().build() }
