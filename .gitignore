@@ -20,7 +20,8 @@
 # AWS User-specific
 .idea
 .idea/**
-.idea/**/modules
+.idea/modules
+.idea/modules/geocoder-repository
 
 
 .idea/**/aws.xml
