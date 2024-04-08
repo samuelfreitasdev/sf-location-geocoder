@@ -8,6 +8,7 @@
 **/buildOutputCleanup/**/*
 
 build/generated/**
+build/generated-src/**
 
 # User-specific stuff
 .idea/**/workspace.xml
