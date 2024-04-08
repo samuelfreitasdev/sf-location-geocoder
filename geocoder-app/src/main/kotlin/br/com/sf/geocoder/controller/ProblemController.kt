@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.toList
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.net.URI
 
 @RestController
 @RequestMapping("/api/problems")
@@ -33,10 +33,18 @@ class ProblemController(val repo: GeocoderProblemPort) {
 			?.let { ResponseEntity.ok(it) } ?: ResponseEntity.notFound().build()
 	}
 
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("", produces = [MediaType.APPLICATION_JSON_VALUE])
-	suspend fun create(@RequestBody problem: GeocoderProblem): ResponseEntity<Void> {
+	suspend fun create(@RequestBody problem: GeocoderProblem): ResponseEntity<GeocoderProblem> {
 		return repo.create(problem)
-			.let { ResponseEntity.created(URI.create("/api/problems/${problem.id}")).build() }
+			.let {
+				return@let ResponseEntity(
+					it, HttpStatus.CREATED
+				)
+//					.ofNullable(it)
+//					.created(URI.create("/api/problems/${problem.id}"))
+//					.build()
+			}
 	}
 
 	@PostMapping("/{id}/copy", produces = [MediaType.APPLICATION_JSON_VALUE])

@@ -79,7 +79,7 @@ class GeocoderProblemJooqAdapter(
 			?.let(::toProblem)
 	}
 
-	override suspend fun create(problem: GeocoderProblem) {
+	override suspend fun create(problem: GeocoderProblem): GeocoderProblem {
 		val now = Instant.now()
 
 		dsl.transactionCoroutine { trx ->
@@ -91,10 +91,10 @@ class GeocoderProblemJooqAdapter(
 				.set(GEOCODER_PROBLEM.UPDATED_AT, now)
 				.returning()
 				.awaitSingle()
-
-//			trx.dsl()
-//				.insertInto()
 		}
+			.let {
+				return toProblem(it)
+			}
 	}
 
 	override suspend fun deleteById(problemId: Long) {

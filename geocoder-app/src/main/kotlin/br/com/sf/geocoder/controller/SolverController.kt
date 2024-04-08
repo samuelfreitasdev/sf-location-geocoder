@@ -20,7 +20,10 @@ class SolverController(
 	fun solverNames() = solverService.solverNames().sorted()
 
 	@PostMapping("/{id}/solve/{solverName}", produces = [MediaType.APPLICATION_JSON_VALUE])
-	suspend fun solve(@PathVariable id: Long, @PathVariable solverName: String): ResponseEntity<SolverStatus> {
+	suspend fun solve(
+		@PathVariable id: Long,
+		@PathVariable solverName: String
+	): ResponseEntity<SolverStatus> {
 		val uuid = solverService.enqueueSolverRequest(id, solverName)
 		logger.info("Solver request enqueued with id: $uuid")
 		return ResponseEntity.ok(solverService.showStatus(id))

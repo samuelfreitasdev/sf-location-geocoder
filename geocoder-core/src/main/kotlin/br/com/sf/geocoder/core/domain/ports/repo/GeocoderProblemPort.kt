@@ -12,7 +12,7 @@ interface GeocoderProblemPort {
 
 	suspend fun getById(problemId: Long): GeocoderProblem?
 
-	suspend fun create(problem: GeocoderProblem)
+	suspend fun create(problem: GeocoderProblem): GeocoderProblem
 
 	suspend fun deleteById(problemId: Long)
 

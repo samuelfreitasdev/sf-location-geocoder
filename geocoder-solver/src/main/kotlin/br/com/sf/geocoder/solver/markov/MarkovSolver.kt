@@ -11,7 +11,7 @@ import java.time.Duration
 
 class MarkovSolver : Solver() {
 
-	override val name: String = "MarkovSolver"
+	override val name: String = NAME
 
 	override fun solveFlow(
 		initialSolution: GeocoderSolution, config: SolverConfig
@@ -25,6 +25,10 @@ class MarkovSolver : Solver() {
 			send(result)
 			close()
 		}
+	}
+
+	companion object {
+		public const val NAME = "MarkovSolver"
 	}
 
 }

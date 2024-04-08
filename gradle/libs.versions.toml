@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.22"
-kotlin-coroutines = "1.7.3"
+kotlin-coroutines = "1.8.0"
 kotlin-logging = "6.0.1"
 junit = "5.10.0"
 spring-boot = "3.2.1"
@@ -45,6 +45,7 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "kotlin-coroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
@@ -54,7 +55,8 @@ junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", vers
 testcontainers-junit = { module = "org.testcontainers:junit-jupiter" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
 
-netty-resolver-dns-native-macos = { module = "io.netty:netty-resolver-dns-native-macos", version = "4.1.107.Final" }
+netty-all = { module = "io.netty:netty-all", version = "4.1.108.Final" }
+netty-resolver-dns-native-macos = { module = "io.netty:netty-resolver-dns-native-macos", version = "4.1.108.Final" }
 spring-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
 spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
 spring-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq", version.ref = "spring-boot" }

@@ -34,11 +34,13 @@ dependencies {
 	developmentOnly(libs.spring.devtools)
 	developmentOnly(libs.spring.compose)
 
-	runtimeOnly(libs.netty.resolver.dns.native.macos)
+	runtimeOnly(libs.netty.all)
+//	runtimeOnly(libs.netty.resolver.dns.native.macos)
 	runtimeOnly(libs.slf4j)
 	runtimeOnly(libs.pg.r2dbc)
 	runtimeOnly(libs.pg.jdbc)
 
+	testImplementation(libs.kotlin.coroutines.test)
 	testImplementation(libs.bundles.spring.test)
 	testImplementation(libs.bundles.junit)
 	testImplementation(libs.bundles.testcontainers)
