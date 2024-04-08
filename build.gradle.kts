@@ -9,8 +9,8 @@ plugins {
 }
 
 allprojects {
-    group = "io.github.pintowar"
-    description = "Sample Geocoding Application using Kotlin + Jenetics/Jsprit/Optaplanner/Or-Tools/Timefold + Graphhopper + Spring Boot + Websockets"
+    group = "com.sf"
+    description = "Sample Geocoding Application using Kotlin + Spring Boot + Websockets"
 }
 
 repositories {
