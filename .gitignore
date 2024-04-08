@@ -20,6 +20,8 @@
 # AWS User-specific
 .idea
 .idea/**
+.idea/**/modules
+
 
 .idea/**/aws.xml
 
