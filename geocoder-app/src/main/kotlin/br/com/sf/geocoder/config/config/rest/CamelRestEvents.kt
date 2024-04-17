@@ -6,12 +6,15 @@ import org.apache.camel.component.hazelcast.HazelcastOperation
 import org.apache.camel.component.reactive.streams.util.UnwrapStreamProcessor
 import org.springframework.stereotype.Component
 
+
 @Component
 class CamelRestEvents : RouteBuilder() {
 
 	override fun configure() {
+
 		from("{{camel.route.consumer.enqueue-request-solver}}")
 			.routeId("enqueue.request.solver")
+//			.log("Enqueue request solver: \${body}")
 			.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
 			.to("{{camel.route.producer.request-solver}}")
 
@@ -22,12 +25,14 @@ class CamelRestEvents : RouteBuilder() {
 
 		from("{{camel.route.consumer.solution-request}}")
 			.routeId("solution.request.queue")
+			.log("Solution request received: \${body}")
 			.bean(AsyncPipeRest::class.java, "update")
 			.process(UnwrapStreamProcessor())
 			.to("{{camel.route.producer.solution-topic}}")
 
 		from("{{camel.route.consumer.broadcast-solution}}")
 			.routeId("broadcast.solution")
+			.log("Broadcasting solution: \${body}")
 			.to("{{camel.route.producer.solution-topic}}")
 
 		from("{{camel.route.consumer.solution-topic}}")

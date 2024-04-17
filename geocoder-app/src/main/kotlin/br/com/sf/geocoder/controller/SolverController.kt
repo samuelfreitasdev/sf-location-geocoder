@@ -25,7 +25,7 @@ class SolverController(
 		@PathVariable solverName: String
 	): ResponseEntity<SolverStatus> {
 		val uuid = solverService.enqueueSolverRequest(id, solverName)
-		logger.info("Solver request enqueued with id: $uuid")
+		logger.info { "Solver request enqueued with id: $uuid" }
 		return ResponseEntity.ok(solverService.showStatus(id))
 	}
 
@@ -46,8 +46,9 @@ class SolverController(
 		@PathVariable id: Long,
 		@Parameter(hidden = true) session: WebSession
 	): ResponseEntity<GeocoderSolutionRequest> {
-		return solverService.currentSolutionRequest(id)?.let { ResponseEntity.ok(it) } ?: ResponseEntity.notFound()
-			.build()
+		return solverService.currentSolutionRequest(id)
+			?.let { ResponseEntity.ok(it) }
+			?: ResponseEntity.notFound().build()
 	}
 
 }

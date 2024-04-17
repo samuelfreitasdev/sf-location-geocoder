@@ -1,5 +1,9 @@
 hazelcast:
   instance-name: geocoder
   cluster-name: geocoder-cluster
-  jet:
-    enabled: true
+  serialization:
+    compact-serialization:
+      serializers:
+        - serializer: br.com.sf.geocoder.config.hz.GeocoderSolutionRequestSerializer
+        - serializer: br.com.sf.geocoder.config.hz.RequestSolverCommandSerializer
+        - serializer: br.com.sf.geocoder.config.hz.CancelSolverCommandSerializer

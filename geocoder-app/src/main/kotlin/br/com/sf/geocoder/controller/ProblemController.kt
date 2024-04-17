@@ -41,9 +41,6 @@ class ProblemController(val repo: GeocoderProblemPort) {
 				return@let ResponseEntity(
 					it, HttpStatus.CREATED
 				)
-//					.ofNullable(it)
-//					.created(URI.create("/api/problems/${problem.id}"))
-//					.build()
 			}
 	}
 

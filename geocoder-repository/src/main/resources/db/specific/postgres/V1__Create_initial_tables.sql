@@ -25,7 +25,7 @@ CREATE TABLE geocoder_solver_request
 	created_at  TIMESTAMP   NOT NULL,
 	updated_at  TIMESTAMP   NOT NULL,
 	PRIMARY KEY (request_key),
-	CONSTRAINT fk_problem_id FOREIGN KEY (problem_id) REFERENCES geocoder_problem (id)
+	CONSTRAINT fk_problem_id FOREIGN KEY (problem_id) REFERENCES geocoder_problem (id) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE geocoder_solver_solution_pk_seq
@@ -47,7 +47,7 @@ CREATE TABLE geocoder_solution_request
 	updated_at  TIMESTAMP   NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT fk_problem_id FOREIGN KEY (problem_id) REFERENCES geocoder_problem (id) ON DELETE CASCADE,
-	CONSTRAINT fk_solver_request_key FOREIGN KEY (request_key) REFERENCES geocoder_solver_request (request_key)
+	CONSTRAINT fk_solver_request_key FOREIGN KEY (request_key) REFERENCES geocoder_solver_request (request_key) ON DELETE CASCADE
 );
 
 CREATE TABLE geocoder_solution

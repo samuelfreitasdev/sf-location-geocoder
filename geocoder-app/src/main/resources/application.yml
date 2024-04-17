@@ -28,6 +28,10 @@ spring:
 camel:
   springboot:
     name: geocoder
+    backlog-tracing: true
+    use-mdc-logging: true
+    tracing: true
+    dev-console-enabled: true
   route:
     producer:
       enqueue-request-solver: direct://enqueue-request-solver
@@ -35,20 +39,26 @@ camel:
       broadcast-solution: direct://broadcast-solution
       broadcast-cancel-solver: direct://broadcast-cancel-solver
 
-      request-solver: hazelcast-queue://request-solver-queue?hazelcastInstanceName=opta_router
-      solution-request: hazelcast-queue://solution-request-queue?hazelcastInstanceName=opta_router
-      solution-topic: hazelcast-topic://solution-topic?hazelcastInstanceName=opta_router
-      cancel-solver-topic: hazelcast-topic://cancel-solver-topic?hazelcastInstanceName=opta_router&reliable=true
+      request-solver: hazelcast-queue://request-solver-queue?hazelcastInstanceName=geocoder
+      solution-request: hazelcast-queue://solution-request-queue?hazelcastInstanceName=geocoder
+      solution-topic: hazelcast-topic://solution-topic?hazelcastInstanceName=geocoder
+      cancel-solver-topic: hazelcast-topic://cancel-solver-topic?hazelcastInstanceName=geocoder&reliable=true
     consumer:
       enqueue-request-solver: direct://enqueue-request-solver
       enqueue-solution-request: direct://enqueue-solution-request
       broadcast-solution: direct://broadcast-solution
       broadcast-cancel-solver: direct://broadcast-cancel-solver
 
-      request-solver: hazelcast-queue://request-solver-queue?hazelcastInstanceName=opta_router&queueConsumerMode=poll
-      solution-request: hazelcast-queue://solution-request-queue?hazelcastInstanceName=opta_router&queueConsumerMode=poll
-      solution-topic: hazelcast-topic://solution-topic?hazelcastInstanceName=opta_router
-      cancel-solver-topic: hazelcast-topic://cancel-solver-topic?hazelcastInstanceName=opta_router&reliable=true
+      request-solver: hazelcast-queue://request-solver-queue?hazelcastInstanceName=geocoder&queueConsumerMode=poll
+      solution-request: hazelcast-queue://solution-request-queue?hazelcastInstanceName=geocoder&queueConsumerMode=poll
+      solution-topic: hazelcast-topic://solution-topic?hazelcastInstanceName=geocoder
+      cancel-solver-topic: hazelcast-topic://cancel-solver-topic?hazelcastInstanceName=geocoder&reliable=true
+  debug:
+    enabled: true
+  component:
+    hazelcast-queue:
+      enabled: true
+      hazelcast-instance: geocoder
 
 endpoints:
   health:
@@ -72,3 +82,6 @@ springdoc:
 solver:
   termination:
     time-limit: 5m
+
+logging.level.org.jooq.Constants: off
+logging.level.com.hazelcast.system.logo: off

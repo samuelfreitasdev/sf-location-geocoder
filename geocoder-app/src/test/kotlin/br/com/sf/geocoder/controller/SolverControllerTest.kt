@@ -2,6 +2,7 @@ package br.com.sf.geocoder.controller
 
 import br.com.sf.geocoder.core.domain.model.Coordinate
 import br.com.sf.geocoder.core.domain.model.GeocoderProblem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -60,13 +61,14 @@ class SolverControllerTest {
 
 	@AfterEach
 	fun teardown() {
-//		`try to delete the problem`(problemCreated)
+		`delete the problem`(problemCreated)
 	}
 
 	@Test
 	fun solverTest() = runTest {
 		`request to start the solver for`(problemCreated)
-		Thread.sleep(Duration.ofMinutes(3).toMillis())
+		`request the problem solution`(problemCreated)
+		delay(5000)
 	}
 
 	private fun `try to submit the problem`(problem: GeocoderProblem): GeocoderProblem {
@@ -80,7 +82,17 @@ class SolverControllerTest {
 			.blockFirst()!!
 	}
 
-	private fun `try to delete the problem`(problem: GeocoderProblem) {
+	private fun `request the problem solution`(problem: GeocoderProblem): GeocoderProblem {
+		return webTestClient.get()
+			.uri("/api/solver/${problem.id}/solution")
+			.exchange()
+			.expectStatus().isOk
+			.returnResult<GeocoderProblem>()
+			.responseBody
+			.blockFirst()!!
+	}
+
+	private fun `delete the problem`(problem: GeocoderProblem) {
 		// Deleting problem
 		webTestClient.delete()
 			.uri("/api/problems/${problem.id}")

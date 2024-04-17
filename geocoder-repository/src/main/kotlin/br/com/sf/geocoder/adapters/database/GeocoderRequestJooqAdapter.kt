@@ -33,7 +33,7 @@ class GeocoderRequestJooqAdapter(
 			.and(GEOCODER_SOLVER_REQUEST.STATUS.`in`(SolverStatus.ENQUEUED.name, SolverStatus.RUNNING.name))
 			.awaitSingle()
 
-		if (numEnqueued > 0) return null
+//		if (numEnqueued > 0) return null
 
 		val now = Instant.now()
 		val result = dsl.insertInto(GEOCODER_SOLVER_REQUEST)

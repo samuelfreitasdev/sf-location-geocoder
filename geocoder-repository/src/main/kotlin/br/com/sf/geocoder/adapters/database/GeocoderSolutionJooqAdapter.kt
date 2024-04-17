@@ -44,29 +44,36 @@ class GeocoderSolutionJooqAdapter(
 		.select(GEOCODER_PROBLEM, GEOCODER_SOLUTION, GEOCODER_SOLUTION_REQUEST)
 		.from(GEOCODER_PROBLEM)
 		.leftJoin(GEOCODER_SOLUTION).on(GEOCODER_SOLUTION.GEOCODER_PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
-		.leftJoin(GEOCODER_SOLVER_REQUEST).on(GEOCODER_SOLVER_REQUEST.PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
+		.leftJoin(GEOCODER_SOLUTION_REQUEST).on(GEOCODER_SOLUTION_REQUEST.PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
 		.where(GEOCODER_PROBLEM.ID.eq(problemId))
-		.orderBy(GEOCODER_SOLVER_REQUEST.UPDATED_AT.desc())
+		.orderBy(GEOCODER_SOLUTION_REQUEST.UPDATED_AT.desc())
 		.limit(1)
 
 	private fun convertRecordToSolutionRequest(
 		record: Record3<GeocoderProblemRecord, GeocoderSolutionRecord, GeocoderSolutionRequestRecord>
 	): GeocoderSolutionRequest {
+
 		val (problem, solution, solverRequest) = record
 
+		val geocoderProblem = GeocoderProblem(
+			problem.id!!,
+			problem.name,
+			serde.fromJson(problem.points.data())
+		)
+		val suggestedCoordinate = solution.get(GEOCODER_SOLUTION.SUGGESTEDCOORDINATE)
+			?.let { serde.fromJson(it.data()) }
+			?: Coordinate.EMPTY
+
+		val status = solverRequest.get(GEOCODER_SOLVER_REQUEST.STATUS)
+			?.let(SolverStatus::valueOf)
+			?: SolverStatus.NOT_SOLVED
+
+		val requestKey = solverRequest.get(GEOCODER_SOLVER_REQUEST.REQUEST_KEY)
+
 		return GeocoderSolutionRequest(
-			GeocoderSolution(
-				GeocoderProblem(
-					problem.id!!,
-					problem.name,
-					serde.fromJson(problem.points.data())
-				),
-				solution.get(GEOCODER_SOLUTION.SUGGESTEDCOORDINATE)
-					?.let { serde.fromJson(it.data()) }
-					?: Coordinate.EMPTY
-			),
-			solverRequest.get(GEOCODER_SOLVER_REQUEST.STATUS)?.let(SolverStatus::valueOf) ?: SolverStatus.NOT_SOLVED,
-			solverRequest.get(GEOCODER_SOLVER_REQUEST.REQUEST_KEY)
+			GeocoderSolution(geocoderProblem, suggestedCoordinate),
+			status,
+			requestKey
 		)
 	}
 

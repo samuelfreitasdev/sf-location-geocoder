@@ -19,10 +19,11 @@ import java.util.Collections.singletonList
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@Testcontainers
 class ProblemControllerTest {
 
 	companion object {
-		val postgres: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>("postgres:15-alpine")
+		private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>("postgres:15-alpine")
 			.apply {
 				withDatabaseName("sf-location-geocoder")
 				withUsername("postgres")

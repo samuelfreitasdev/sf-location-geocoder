@@ -24,8 +24,8 @@ data class GeocoderSummary(
 
 data class GeocoderProblem(
 	val id: Long,
-	val name: String,
-	val points: List<Coordinate>
+	val name: String = "",
+	val points: List<Coordinate> = emptyList()
 )
 
 data class GeocoderRequest(
