@@ -1,6 +1,7 @@
 package br.com.sf.geocoder.core.solver
 
 import br.com.sf.geocoder.core.domain.messages.CancelSolverCommand
+import br.com.sf.geocoder.core.domain.messages.RequestSolverCommand
 import br.com.sf.geocoder.core.domain.messages.SolutionRequestCommand
 import br.com.sf.geocoder.core.domain.model.GeocoderSolutionRequest
 import br.com.sf.geocoder.core.domain.model.SolverStatus
@@ -31,10 +32,12 @@ class SolverService(
 
 	suspend fun enqueueSolverRequest(problemId: Long, solverName: String): UUID? {
 		return solverRepository.enqueue(problemId, solverName)?.let { request ->
-
 			solverRepository.currentSolutionRequest(problemId)?.let { solution ->
-				solverEventsPort.enqueueSolutionRequest(
-					SolutionRequestCommand(solution, true)
+//				solverEventsPort.enqueueSolutionRequest(
+//					SolutionRequestCommand(solution, true)
+//				)
+				solverEventsPort.enqueueRequestSolver(
+					RequestSolverCommand(solution.solution, request.requestKey, solverName)
 				)
 			}
 //
@@ -42,7 +45,7 @@ class SolverService(
 //				solverEventsPort.enqueueRequestSolver(
 //					RequestSolverCommand(detailedSolution, request.requestKey, solverName)
 //				)
-				request.requestKey
+			request.requestKey
 //			}
 		}
 	}

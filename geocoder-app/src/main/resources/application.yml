@@ -49,8 +49,8 @@ camel:
       broadcast-solution: direct://broadcast-solution
       broadcast-cancel-solver: direct://broadcast-cancel-solver
 
-      request-solver: hazelcast-queue://request-solver-queue?hazelcastInstanceName=geocoder&queueConsumerMode=poll
-      solution-request: hazelcast-queue://solution-request-queue?hazelcastInstanceName=geocoder&queueConsumerMode=poll
+      request-solver: hazelcast-queue://request-solver-queue?hazelcastInstanceName=geocoder&queueConsumerMode=listen
+      solution-request: hazelcast-queue://solution-request-queue?hazelcastInstanceName=geocoder&queueConsumerMode=listen
       solution-topic: hazelcast-topic://solution-topic?hazelcastInstanceName=geocoder
       cancel-solver-topic: hazelcast-topic://cancel-solver-topic?hazelcastInstanceName=geocoder&reliable=true
   debug:

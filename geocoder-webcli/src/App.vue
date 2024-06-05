@@ -1,84 +1,35 @@
-<script setup lang="ts">
-import {RouterView} from 'vue-router'
+<script lang="ts" setup>
+import { useColorMode } from '@vueuse/core'
+import { localThemes, modes } from './themes'
+
+const mode = useColorMode({
+	attribute: 'data-theme',
+	modes: modes,
+})
 </script>
 
 <template>
-<!--  <header>-->
-<!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->
+	<header class="navbar bg-base-300">
+		<div class="flex-1">
+			<a class="btn btn-ghost normal-case text-xl">Geocoder</a>
+			<router-link to="/" class="btn btn-ghost normal-case text-l">Home</router-link>
+		</div>
+		<div class="justify-end space-x-4">
+			<a href="https://github.com/samuelfreitasdev/smart-geocoder">
+				<v-icon name="fa-github" scale="2" />
+			</a>
+			<select v-model="mode" class="select select-sm w-full max-w-xs" data-choose-theme>
+				<option v-for="theme in localThemes" :key="theme" :value="theme">{{ theme }}</option>
+			</select>
+		</div>
+	</header>
 
-<!--    <div class="wrapper">-->
-<!--      <HelloWorld msg="You did it!" />-->
+	<router-view></router-view>
 
-<!--      <nav>-->
-<!--        <RouterLink to="/">Home</RouterLink>-->
-<!--        <RouterLink to="/about">About</RouterLink>-->
-<!--      </nav>-->
-<!--    </div>-->
-<!--  </header>-->
-
-  <RouterView />
+	<footer class="footer items-center p-4 bg-neutral text-neutral-content fixed bottom-0">
+		<div class="items-center grid-flow-col">
+			<v-icon name="fa-slack-hash" scale="2" />
+			<p>Copyright © 2023 - All right reserved</p>
+		</div>
+	</footer>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>

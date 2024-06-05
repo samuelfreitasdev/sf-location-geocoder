@@ -17,6 +17,7 @@ data class GeocoderSummary(
 	val nLocations: Int,
 	val numEnqueuedRequests: Int,
 	val numRunningRequests: Int,
+
 	val numTerminatedRequests: Int,
 	val numNotSolvedRequests: Int,
 	val numSolverRequests: Int

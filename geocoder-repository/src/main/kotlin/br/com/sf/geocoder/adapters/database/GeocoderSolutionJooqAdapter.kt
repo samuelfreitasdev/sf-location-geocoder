@@ -11,7 +11,7 @@ import org.jooq.JSON
 import org.jooq.Record3
 import org.jooq.generated.tables.records.GeocoderProblemRecord
 import org.jooq.generated.tables.records.GeocoderSolutionRecord
-import org.jooq.generated.tables.records.GeocoderSolutionRequestRecord
+import org.jooq.generated.tables.records.GeocoderSolverRequestRecord
 import org.jooq.generated.tables.references.GEOCODER_PROBLEM
 import org.jooq.generated.tables.references.GEOCODER_SOLUTION
 import org.jooq.generated.tables.references.GEOCODER_SOLUTION_REQUEST
@@ -41,16 +41,16 @@ class GeocoderSolutionJooqAdapter(
 	}
 
 	private fun currentSolutionRequestQuery(dsl: DSLContext, problemId: Long) = dsl
-		.select(GEOCODER_PROBLEM, GEOCODER_SOLUTION, GEOCODER_SOLUTION_REQUEST)
+		.select(GEOCODER_PROBLEM, GEOCODER_SOLUTION, GEOCODER_SOLVER_REQUEST)
 		.from(GEOCODER_PROBLEM)
 		.leftJoin(GEOCODER_SOLUTION).on(GEOCODER_SOLUTION.GEOCODER_PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
-		.leftJoin(GEOCODER_SOLUTION_REQUEST).on(GEOCODER_SOLUTION_REQUEST.PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
+		.leftJoin(GEOCODER_SOLVER_REQUEST).on(GEOCODER_SOLVER_REQUEST.PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
 		.where(GEOCODER_PROBLEM.ID.eq(problemId))
-		.orderBy(GEOCODER_SOLUTION_REQUEST.UPDATED_AT.desc())
+		.orderBy(GEOCODER_SOLVER_REQUEST.UPDATED_AT.desc())
 		.limit(1)
 
 	private fun convertRecordToSolutionRequest(
-		record: Record3<GeocoderProblemRecord, GeocoderSolutionRecord, GeocoderSolutionRequestRecord>
+		record: Record3<GeocoderProblemRecord, GeocoderSolutionRecord, GeocoderSolverRequestRecord>
 	): GeocoderSolutionRequest {
 
 		val (problem, solution, solverRequest) = record
