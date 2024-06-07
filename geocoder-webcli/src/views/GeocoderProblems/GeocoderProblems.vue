@@ -24,7 +24,7 @@ const {
 const selectedProblem = ref<GeocoderSummary | null>(null)
 
 const openRemove = ref<boolean>(false)
-const removeUrl = computed(() => `/api/problems/${selectedProblem.value?.id}/remove`)
+const removeUrl = computed(() => `/api/problems/${selectedProblem.value?.id}`)
 const removeError = ref(false)
 
 const showDeleteModal = (instance: GeocoderSummary) => {
