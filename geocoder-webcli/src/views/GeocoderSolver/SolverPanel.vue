@@ -57,7 +57,7 @@ async function wrapperClear() {
 </script>
 
 <template>
-	<div class="flex flex-col overflow-y-auto space-y-2" :style="style">
+	<div class="form-control flex flex-col overflow-y-auto space-y-2" :style="style">
 		<div class="flex space-x-2">
 			<div class="basis-1/2">
 				<h1>Solver</h1>
@@ -81,32 +81,40 @@ async function wrapperClear() {
 		<div class="flex space-x-2">
 			<label class="relative inline-flex items-center mb-4 cursor-pointer">
 				<span class="mr-3 text-sm font-medium">Solver</span>
-				<select v-model="editorSelectedSolver"
-						class="select select-bordered select-xs">
+				<select
+					v-model="editorSelectedSolver"
+					class="select select-bordered select-xs w-full max-w-xs"
+				>
 					<option
 						v-for="(solver, index) in solvers"
 						:key="solver"
 						:value="solver"
-						:selected="index === 0"
+						:selected="index == 0"
 					>
 						{{ solver }}
 					</option>
 				</select>
 			</label>
 		</div>
-		<div class="flex space-x-2">
+		<div class="flex justify-between">
 			<div class="card-actions">
-				<button class="btn btn-sm btn-success" @click="$emit('onSolve')">
+				<button
+					class="btn btn-sm btn-success"
+					:disabled="isRunning"
+					@click="$emit('onSolve')"
+				>
 					Solve
 					<span v-if="isRunning" class="loading loading-bars loading-xs"></span>
 				</button>
 				<button
+					:disabled="!isRunning || waitingTermination"
 					class="btn btn-sm btn-warning"
 					@click="wrapperTermination">
 					Terminate
 					<span v-if="waitingTermination" class="loading loading-bars loading-xs"></span>
 				</button>
 				<button
+					:disabled="isRunning || waitingClear"
 					class="btn btn-sm btn-error"
 					@click="wrapperClear">
 					Clear
@@ -114,25 +122,27 @@ async function wrapperClear() {
 				</button>
 			</div>
 		</div>
-		<div class="flex space-x-2">
-			<div class="flex justify-end space-x-2">
-				<!--				Points: {{ problem?.points.length || 0 }}-->
-			</div>
-
-			<div class="flex justify-end space-x-2">
+		<div class="">
+			<div>
 				<p>Points:</p>
-				<ul>
-					<li v-for="(point, index) in problem?.points || []">
-						{{ index }}: {{ point.lat.toFixed(4) }}, {{ point.lng.toFixed(4) }}
-					</li>
-				</ul>
+
+				<table class="table table-zebra w-full">
+					<thead>
+					<tr>
+						<th>Index</th>
+						<th>Latitude</th>
+						<th>Longitude</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="(point, index) in problem?.points || []">
+						<td>{{ index }}</td>
+						<td>{{ point.lat.toFixed(4) }}</td>
+						<td>{{ point.lng.toFixed(4) }}</td>
+					</tr>
+					</tbody>
+				</table>
 			</div>
-
-
-			<!--			<span>Points: {{ solution?.problem.points.length || 0 }}</span>-->
-		</div>
-		<div class="flex space-x-2">
-			<!--			<solver-vehicles :solution="solution" />-->
 		</div>
 	</div>
 

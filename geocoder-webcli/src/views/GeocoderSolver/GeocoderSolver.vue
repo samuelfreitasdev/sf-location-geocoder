@@ -5,7 +5,7 @@ import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import SolverPanel from './SolverPanel.vue'
 import { type GeocoderProblem, GeocoderSolution } from '../../api'
-import { useFetch } from '@vueuse/core'
+import { useFetch, watchOnce } from '@vueuse/core'
 import SolverMap from '../../views/GeocoderSolver/SolverMap.vue'
 
 const route = useRoute()
@@ -59,6 +59,10 @@ async function cleanAction() {
 		await clean()
 	}
 }
+
+watchOnce(solvers, () => {
+	selectedSolver.value = (solvers.value && solvers.value[0]) || "";
+});
 </script>
 
 <template>
@@ -79,7 +83,7 @@ async function cleanAction() {
 			</template>
 			<template #main>
 				<solver-map
-					v-if="problem?.points.length > 0"
+					v-if="problem?.points?.length > 0"
 					:solution="solution"
 					:problem="problem"
 				/>
