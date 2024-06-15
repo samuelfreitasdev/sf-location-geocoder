@@ -12,16 +12,18 @@ const route = useRoute()
 
 const solverStatus = ref<string | null>(null)
 const solution = ref<GeocoderSolution | null>(null)
-const problem = ref<GeocoderProblem | null>(null)
-const isDetailedPath = ref<boolean>(false)
+// const problem = ref<GeocoderProblem | null>(null)
 const selectedSolver = ref<string>('')
 
-const solutionPanelUrl = computed(() => `/api/solver/${route.params.id}/solution`)
+// const solutionPanelUrl = computed(() => `/api/solver/${route.params.id}/solution`)
 const solverNamesUrl = ref('/api/solver/solver-names')
 
+const problemUrl = computed(() => `/api/problems/${route.params.id}`)
 const solveUrl = computed(() => `/api/solver/${route.params.id}/solve/${selectedSolver.value}`)
 const terminateUrl = computed(() => `/api/solver/${route.params.id}/terminate`)
 const cleanUrl = computed(() => `/api/solver/${route.params.id}/clean`)
+
+const { data: problem } = useFetch(problemUrl, { immediate: true }).get().json<GeocoderProblem>()
 
 // const {
 // 	isFetching,
@@ -33,7 +35,7 @@ const {
 	isFetching,
 	error,
 	data: solvers,
-} = useFetch(solverNamesUrl, { initialData: [], immediate: false }).get().json<string[]>()
+} = useFetch(solverNamesUrl, { initialData: [], immediate: true }).get().json<string[]>()
 
 const { data: solveStatus, execute: solve } = useFetch(solveUrl, { immediate: false }).post().json<string>()
 const { execute: terminate } = useFetch(terminateUrl, { immediate: false }).post().json<string>()
@@ -66,6 +68,7 @@ async function cleanAction() {
 				<solver-panel
 					v-model:selected-solver="selectedSolver"
 					:solution="solution"
+					:problem="problem"
 					:solvers="solvers || []"
 					:solver-status="solverStatus"
 					:style="`height: calc(100vh - ${mapFooterHeight})`"
@@ -76,9 +79,9 @@ async function cleanAction() {
 			</template>
 			<template #main>
 				<solver-map
-					solution="solution"
+					v-if="problem?.points.length > 0"
+					:solution="solution"
 					:problem="problem"
-					:is-detailed-path="isDetailedPath"
 				/>
 			</template>
 		</geocoder-solver-panel-layout>

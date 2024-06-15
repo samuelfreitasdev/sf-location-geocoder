@@ -1,56 +1,53 @@
 <script setup lang="ts">
 
-import type { Coordinate, GeocoderSolution } from '../../api'
-import { computed, ref, toRefs } from 'vue'
-import { LMap, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet'
+import 'leaflet/dist/leaflet.css'
 import * as L from 'leaflet'
+import { LIcon, LMap, LMarker, LPolygon, LPopup, LTileLayer } from '@vue-leaflet/vue-leaflet'
+
+import type { Coordinate, GeocoderProblem, GeocoderSolution } from '../../api'
+import { computed, ref, watchEffect } from 'vue'
 
 const props = defineProps<{
 	solution: GeocoderSolution | null;
+	problem: GeocoderProblem | null;
 }>()
 
-const { solution } = toRefs(props)
+const points = computed(() => props.problem?.points || [])
 
-const problem = computed(() => solution.value?.problem)
-
-const points = computed<(Coordinate)[]>(() => {
-	return (problem.value?.points || [])
-})
-
-const result = computed<(Coordinate)>(() => {
-	return solution.value?.suggestedCoordinate || { lat: 0, lng: 0 }
+const result = computed<Coordinate | null>(() => {
+	return props.solution?.suggestedCoordinate || null
 })
 
 // MAP OPTIONS
+const routerMap = ref<typeof LMap | null>(null)
 
 const center = ref<L.PointExpression>([0, 0])
 const zoom = ref(3)
 const minZoom = 2
-const maxZoom = 18
+const maxZoom = 6
 const mapOptions = { attributionControl: false }
 
 const layerUrl = 'https://{s}.tile.osm.org/{z}/{x}/{y}.png'
 const layerOptions = { subdomains: ['a', 'b', 'c'] }
 
-function pointKey(point: Coordinate) {
-	return `${point.lat.toFixed(4)}-${point.lng.toFixed(4)}`
+function pointKey(point: Coordinate): string {
+	return `${point.lat.toFixed(4)}, ${point.lng.toFixed(4)}`
 }
 
-function getPointIcon() {
-	return L.icon({
-		iconUrl: '/point.svg',
-		iconSize: [48, 48],
-		className: '',
-	})
-}
+watchEffect(() => {
+	const bounds: L.LatLngBounds = L.featureGroup(
+		points.value.map((e) => new L.Marker([e.lat, e.lng])),
+	).getBounds()
 
-function getResultIcon() {
-	return L.icon({
-		iconUrl: '/result.svg',
-		iconSize: [48, 48],
-		className: '',
-	})
-}
+	if (bounds.isValid()) {
+		const tmp = [
+			[bounds.getSouthWest().lat, bounds.getSouthWest().lng],
+			[bounds.getNorthEast().lat, bounds.getNorthEast().lng],
+		]
+		routerMap.value?.leafletObject?.fitBounds(tmp)
+	}
+})
+
 </script>
 
 <template>
@@ -66,30 +63,37 @@ function getResultIcon() {
 		>
 			<l-tile-layer :url="layerUrl" :options="layerOptions" />
 			<l-marker
-				v-for="point in points || []"
+				v-for="(point, index) in points || []"
 				:key="pointKey(point)"
 				:name="pointKey(point)"
 				:lat-lng="point"
-				:attribution="`{ &quot;locationId&quot;: ${pointKey(point)} }`"
-				:icon="getPointIcon()"
+				:attribution="`{ &quot;locationIds&quot;: ${pointKey(point)} }`"
 			>
-				<!--				<l-popup-->
-				<!--					v-if="!isHighlighted(point)"-->
-				<!--					:key="pointKey(point)"-->
-				<!--				>-->
-				<!--					<div>-->
-				<!--						<span>{{ pointKey(point) }}</span>-->
-				<!--					</div>-->
-				<!--				</l-popup>-->
+				<l-icon
+					icon-url="/point.svg"
+					:icon-size="[40,40]"
+					:icon-anchor="[20, 38]"
+				/>
+				<l-popup :key="pointKey(point)">
+					<div>
+						<span> {{ index }}: {{ pointKey(point) }} </span>
+					</div>
+				</l-popup>
 			</l-marker>
-
+			<l-polygon :lat-lngs="points"></l-polygon>
 			<l-marker
+				v-if="result"
 				:key="pointKey(result)"
 				:name="pointKey(result)"
 				:lat-lng="result"
 				:attribution="`{ &quot;locationId&quot;: ${pointKey(result)} }`"
-				:icon="getResultIcon"
-			></l-marker>
+			>
+				<l-icon
+					icon-url="/result.svg"
+					:icon-size="[40,40]"
+					:icon-anchor="[20, 40]"
+				/>
+			</l-marker>
 		</l-map>
 	</div>
 </template>
