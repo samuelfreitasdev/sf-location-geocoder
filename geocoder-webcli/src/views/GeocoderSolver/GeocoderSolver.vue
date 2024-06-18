@@ -83,7 +83,7 @@ watchOnce(solvers, () => {
 			</template>
 			<template #main>
 				<solver-map
-					v-if="problem?.points?.length > 0"
+					v-if="(problem?.points || []).length > 0"
 					:solution="solution"
 					:problem="problem"
 				/>
