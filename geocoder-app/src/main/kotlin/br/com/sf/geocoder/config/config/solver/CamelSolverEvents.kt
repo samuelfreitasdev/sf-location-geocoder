@@ -11,6 +11,7 @@ class CamelSolverEvents : RouteBuilder() {
 	override fun configure() {
 		from("{{camel.route.consumer.request-solver}}")
 			.routeId("request.solver.queue")
+			.transform().spel("#{body.item}")
 			.bean(AsyncPipeSolver::class.java, "solve")
 			.process(SplitStreamProcessorTo("{{camel.route.producer.solution-request}}", context))
 
