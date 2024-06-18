@@ -24,6 +24,10 @@ spring:
       indent_output: true
       write_dates_as_timestamps: false
       write_durations_as_timestamps: false
+  hazelcast:
+    config: classpath:hazelcast.yaml
+  jmx:
+    enabled: true
 
 camel:
   springboot:
@@ -59,6 +63,11 @@ camel:
     hazelcast-queue:
       enabled: true
       hazelcast-instance: geocoder
+    hazelcast-topic:
+      enabled: true
+      hazelcast-instance: geocoder
+  main:
+    dev-console-enabled: true
 
 endpoints:
   health:
@@ -73,7 +82,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,env,loggers,mappings,scheduledtasks,threaddump,heapdump,beans,sessions
+        include: '*'
+
+hawtio:
+  disableProxy: true
+  authenticationEnabled: false
 
 springdoc:
   api-docs:

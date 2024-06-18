@@ -34,6 +34,7 @@ dependencies {
 	developmentOnly(libs.spring.devtools)
 	developmentOnly(libs.spring.compose)
 
+	runtimeOnly(libs.bundles.hawtio)
 	runtimeOnly(libs.netty.all)
 //	runtimeOnly(libs.netty.resolver.dns.native.macos)
 	runtimeOnly(libs.slf4j)

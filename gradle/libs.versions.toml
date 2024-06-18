@@ -12,6 +12,7 @@ flyway = "9.17.0"
 jooq = "3.19.1"
 hazelcast = "5.3.1"
 camel = "4.3.0"
+hawtio = "4.0.0"
 h2 = "2.2.224"
 postgres = "42.7.2"
 shedlock = "5.10.2"
@@ -90,8 +91,18 @@ camel-boot = { module = "org.apache.camel.springboot:camel-spring-boot-starter",
 camel-bean = { module = "org.apache.camel.springboot:camel-bean-starter", version.ref = "camel" }
 camel-stream = { module = "org.apache.camel.springboot:camel-reactive-streams-starter", version.ref = "camel" }
 camel-hazelcast = { module = "org.apache.camel.springboot:camel-hazelcast-starter", version.ref = "camel" }
+camel-management-starter = { module = "org.apache.camel.springboot:camel-management-starter", version.ref = "camel" }
+camel-console-starter = { module = "org.apache.camel.springboot:camel-console-starter", version.ref = "camel" }
 
 slf4j = { module = "org.slf4j:jcl-over-slf4j", version.ref = "sfl4j" }
+
+hawtio = { module = "io.hawt:hawtio-springboot", version.ref = "hawtio" }
+hawtio-local-jvm-mbean = { module = "io.hawt:hawtio-local-jvm-mbean", version.ref = "hawtio" }
+hawtio-log = { module = "io.hawt:hawtio-log", version.ref = "hawtio" }
+hawtio-log-logback = { module = "io.hawt:hawtio-log-logback", version.ref = "hawtio" }
+#camel-management-starter = { module = "org.apache.camel.springboot:camel-management-starter", version = "4.6.0" }
+camel-spring-boot-xml-starter = { module = "org.apache.camel.springboot:camel-spring-boot-xml-starter", version = "4.6.0" }
+
 
 [bundles]
 kotlin = ["kotlin-stdlib", "kotlin-reflect", "kotlin-logging"]
@@ -100,6 +111,7 @@ spring-test = ["spring-test", "spring-testcontainers"]
 jooq = ["jooq-core", "jooq-kotlin", "jooq-kotlin-coroutines"]
 jackson = ["jackson-core", "jackson-annotations", "jackson-databind", "jackson-kotlin"]
 shedlock = ["shedlock", "shedlock-hazelcast"]
-camel = ["camel-boot", "camel-bean", "camel-stream", "camel-hazelcast"]
+camel = ["camel-boot", "camel-bean", "camel-stream", "camel-hazelcast", "camel-console-starter"]
+hawtio = ["hawtio", "hawtio-local-jvm-mbean", "hawtio-log", "hawtio-log-logback", "camel-management-starter", "camel-spring-boot-xml-starter"]
 junit = ["junit-jupiter-api", "junit-jupiter-engine", "junit-platform-launcher", "junit-vintage-engine"]
 testcontainers = ["testcontainers-junit", "testcontainers-postgresql"]
