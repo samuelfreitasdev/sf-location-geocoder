@@ -4,11 +4,9 @@ import br.com.sf.geocoder.core.domain.model.GeocoderSolutionRequest
 import br.com.sf.geocoder.core.domain.model.SolverStatus
 import br.com.sf.geocoder.core.solver.SolverService
 import io.github.oshai.kotlinlogging.KLogging
-import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.WebSession
 
 @RestController
 @RequestMapping("/api/solver")
@@ -44,7 +42,7 @@ class SolverController(
 	@GetMapping("/{id}/solution", produces = [MediaType.APPLICATION_JSON_VALUE])
 	suspend fun solutionState(
 		@PathVariable id: Long,
-		@Parameter(hidden = true) session: WebSession
+//		@Parameter(hidden = true) session: WebSession
 	): ResponseEntity<GeocoderSolutionRequest> {
 		return solverService.currentSolutionRequest(id)
 			?.let { ResponseEntity.ok(it) }
