@@ -8,7 +8,7 @@ import type { Coordinate, GeocoderProblem, GeocoderSolution } from '../../api'
 import { computed, ref, watchEffect } from 'vue'
 
 const props = defineProps<{
-	solution: GeocoderSolution | null;
+	solution: GeocoderSolution | null | undefined
 	problem: GeocoderProblem | null;
 }>()
 

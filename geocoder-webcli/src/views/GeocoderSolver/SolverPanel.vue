@@ -1,12 +1,11 @@
 <script setup lang="ts">
 
 import { computed, ref, type StyleValue, toRefs } from 'vue'
-import { type GeocoderProblem } from '../../api'
+import { type GeocoderProblem, type GeocoderSolution } from '../../api'
 import { until } from '@vueuse/core'
-// import GeocoderProblems from '@/views/GeocoderProblems/GeocoderProblems.vue'
 
 const props = defineProps<{
-	// solution: GeocoderSolution | null;
+	solution: GeocoderSolution | null | undefined;
 	problem: GeocoderProblem | null;
 	solverStatus: string | null;
 	selectedSolver: string;
@@ -22,7 +21,6 @@ const emit = defineEmits<{
 }>()
 
 const {
-	// solution,
 	problem,
 	solverStatus,
 	selectedSolver,
@@ -125,7 +123,6 @@ async function wrapperClear() {
 		<div class="">
 			<div>
 				<p>Points:</p>
-
 				<table class="table table-zebra w-full">
 					<thead>
 					<tr>
@@ -142,6 +139,25 @@ async function wrapperClear() {
 					</tr>
 					</tbody>
 				</table>
+
+				<div v-if="solution" class="mt-3.5">
+					<p>Result:</p>
+
+					<table class="table table-zebra w-full">
+						<thead>
+						<tr>
+							<th>Latitude</th>
+							<th>Longitude</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>{{ solution.suggestedCoordinate.lat.toFixed(4) }}</td>
+							<td>{{ solution.suggestedCoordinate.lng.toFixed(4) }}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
