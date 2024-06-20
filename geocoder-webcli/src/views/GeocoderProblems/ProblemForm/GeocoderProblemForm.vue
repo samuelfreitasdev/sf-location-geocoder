@@ -107,7 +107,7 @@ function pointKey(point: Coordinate) {
 			</div>
 
 			<div class="overflow-auto" style="max-height: 600px">
-				<table class="table table-sm table-zebra w-full " >
+				<table class="table table-sm table-zebra w-full ">
 					<thead>
 					<tr>
 						<th>Latitude</th>

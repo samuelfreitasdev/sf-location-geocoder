@@ -58,7 +58,7 @@ async function wrapperClear() {
 	<div class="form-control flex flex-col overflow-y-auto space-y-2" :style="style">
 		<div class="flex space-x-2">
 			<div class="basis-1/2">
-				<h1>Solver</h1>
+				<h1 class="text-lg">Solver for {{ problem?.name }}</h1>
 			</div>
 			<div class="basis-1/2 flex flex-row-reverse">
 				<!--				<router-link :to="`/solver-history/${solution?.problem.id}`" class="link link-primary">-->

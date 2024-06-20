@@ -8,7 +8,7 @@ const router = createRouter({
 	history: createWebHistory(),
 	routes: [
 		{ path: '/', component: GeocoderProblems },
-		{ path: "/solve/:id", component: GeocoderSolver },
+		{ path: '/solve/:id', component: GeocoderSolver },
 		{ path: '/problem/new', component: ProblemEditor, props: { mode: 'create' } },
 		{ path: '/problem/:id/edit', component: ProblemEditor, props: { mode: 'update' } },
 		{ path: '/problem/:id/copy', component: ProblemEditor, props: { mode: 'copy' } },

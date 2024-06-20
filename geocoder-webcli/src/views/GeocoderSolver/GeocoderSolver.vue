@@ -24,8 +24,8 @@ const cleanUrl = computed(() => `/api/solver/${route.params.id}/clean`)
 
 const { data: problem } = useFetch(problemUrl, { immediate: true }).get().json<GeocoderProblem>()
 
-const { error, execute: fetchProblem, data: solution } = useFetch(solutionPanelUrl, {
-	refetch: refetchSolution, afterFetch: afterFetchSolution, immediate: true,
+const { execute: fetchProblem, data: solution } = useFetch(solutionPanelUrl, {
+	refetch: refetchSolution, afterFetch: afterFetchSolution, immediate: true, timeout: 5000, updateDataOnError: true,
 }).get().json<GeocoderSolutionRequest>()
 
 const { isFetching, data: solvers } = useFetch(solverNamesUrl, {
@@ -42,7 +42,7 @@ function afterFetchSolution(ctx: AfterFetchContext<GeocoderSolutionRequest>) {
 	solverStatus.value = ctx.data?.status || 'NOT_SOLVED'
 
 	if (refetchSolution.value) {
-		setTimeout(() => fetchProblem(), 1000)
+		setTimeout(() => fetchProblem(), 5000)
 	}
 
 	return ctx
@@ -76,7 +76,7 @@ watchOnce(solvers, () => {
 </script>
 
 <template>
-	<geocoder-page-layout v-slot="{ mapFooterHeight }" :is-fetching="isFetching" :error="error">
+	<geocoder-page-layout v-slot="{ mapFooterHeight }" :is-fetching="isFetching" :error="null">
 		<geocoder-solver-panel-layout>
 			<template #menu>
 				<solver-panel

@@ -1,4 +1,4 @@
-export { default as AlertMessage } from "./AlertMessage.vue";
-export { default as DeleteDialog } from "./DeleteDialog.vue";
-export { default as InputSearch } from "./InputSearch.vue";
-export { default as PaginatedTable } from "./PaginatedTable.vue";
+export { default as AlertMessage } from './AlertMessage.vue'
+export { default as DeleteDialog } from './DeleteDialog.vue'
+export { default as InputSearch } from './InputSearch.vue'
+export { default as PaginatedTable } from './PaginatedTable.vue'

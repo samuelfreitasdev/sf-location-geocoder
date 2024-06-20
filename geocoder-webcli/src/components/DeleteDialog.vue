@@ -4,57 +4,57 @@ import { computed, ref, toRefs, watch } from 'vue'
 import { useFetch } from '@vueuse/core'
 
 const props = defineProps<{
-  open: boolean;
-  message: string;
-  url: string;
-}>();
+	open: boolean;
+	message: string;
+	url: string;
+}>()
 
 const emit = defineEmits<{
-  (e: "update:url", val: string): void;
-  (e: "update:open", val: boolean): void;
-  (e: "successRemove"): void;
-  (e: "failRemove", val: unknown): void;
-}>();
+	(e: 'update:url', val: string): void;
+	(e: 'update:open', val: boolean): void;
+	(e: 'successRemove'): void;
+	(e: 'failRemove', val: unknown): void;
+}>()
 
-const { open, message, url } = toRefs(props);
+const { open, message, url } = toRefs(props)
 
-const modalRef = ref<HTMLDialogElement | null>(null);
+const modalRef = ref<HTMLDialogElement | null>(null)
 
 const openedModal = computed({
-  get: () => open.value,
-  set: (val) => emit("update:open", val),
-});
+	get: () => open.value,
+	set: (val) => emit('update:open', val),
+})
 
 const removeUrl = computed({
-  get: () => url.value,
-  set: (val) => emit("update:url", val),
-});
+	get: () => url.value,
+	set: (val) => emit('update:url', val),
+})
 
 const {
-  isFetching: isRemoving,
-  error: removeError,
-  execute: remove,
-} = useFetch(removeUrl, { immediate: false }).delete();
+	isFetching: isRemoving,
+	error: removeError,
+	execute: remove,
+} = useFetch(removeUrl, { immediate: false }).delete()
 
 async function removeAction() {
-  await remove();
-  openedModal.value = false;
-  emit("successRemove");
+	await remove()
+	openedModal.value = false
+	emit('successRemove')
 }
 
 watch(openedModal, (opened) => {
-  if (opened) {
-	modalRef?.value?.showModal();
-  } else {
-	modalRef?.value?.close();
-  }
-});
+	if (opened) {
+		modalRef?.value?.showModal()
+	} else {
+		modalRef?.value?.close()
+	}
+})
 
 watch(removeError, (error) => {
-  if (error) {
-	emit("failRemove", error);
-  }
-});
+	if (error) {
+		emit('failRemove', error)
+	}
+})
 
 </script>
 
