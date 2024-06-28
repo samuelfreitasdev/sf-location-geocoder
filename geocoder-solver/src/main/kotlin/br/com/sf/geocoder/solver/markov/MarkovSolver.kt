@@ -1,13 +1,10 @@
 package br.com.sf.geocoder.solver.markov
 
-import br.com.sf.geocoder.core.domain.model.Coordinate
 import br.com.sf.geocoder.core.domain.model.GeocoderSolution
 import br.com.sf.geocoder.core.solver.SolverConfig
 import br.com.sf.geocoder.core.solver.spi.Solver
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import java.time.Duration
 
 class MarkovSolver : Solver() {
 
@@ -17,10 +14,24 @@ class MarkovSolver : Solver() {
 		initialSolution: GeocoderSolution, config: SolverConfig
 	): Flow<GeocoderSolution> {
 		return callbackFlow {
-			delay(Duration.ofMinutes(1).toMillis())
+
+//			val markovExecutor = MonteCarloMarkovChain(
+//				numberOfSamples = 1000,
+//				numberOfWarmupSamples = 500
+//			)
+//
+//			val points = initialSolution.problem.points
+//
+//			val inferredLat = markovExecutor.solve(points.map { it.lat })
+//			val inferredLng = markovExecutor.solve(points.map { it.lng })
+
+			val coordinate = MetropolisHastings().solve(
+				initialSolution.problem.points
+			)
+
 			val result = GeocoderSolution(
 				initialSolution.problem,
-				Coordinate(-12.0, -12.0),
+				coordinate,
 			)
 			send(result)
 			close()
@@ -28,7 +39,7 @@ class MarkovSolver : Solver() {
 	}
 
 	companion object {
-		public const val NAME = "MarkovSolver"
+		const val NAME = "MarkovSolver"
 	}
 
 }
