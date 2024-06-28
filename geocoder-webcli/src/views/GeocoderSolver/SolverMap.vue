@@ -6,6 +6,7 @@ import { LIcon, LMap, LMarker, LPolygon, LPopup, LTileLayer } from '@vue-leaflet
 
 import type { Coordinate, GeocoderProblem, GeocoderSolution } from '../../api'
 import { computed, ref, watchEffect } from 'vue'
+import { watchArray } from '@vueuse/core'
 
 const props = defineProps<{
 	solution: GeocoderSolution | null | undefined
@@ -23,8 +24,8 @@ const routerMap = ref<typeof LMap | null>(null)
 
 const center = ref<L.PointExpression>([0, 0])
 const zoom = ref(3)
-const minZoom = 2
-const maxZoom = 6
+const minZoom = 1
+const maxZoom = 20
 const mapOptions = { attributionControl: false }
 
 const layerUrl = 'https://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -34,7 +35,15 @@ function pointKey(point: Coordinate): string {
 	return `${point.lat.toFixed(4)}, ${point.lng.toFixed(4)}`
 }
 
+watchArray(points, () => {
+	fitMap()
+})
+
 watchEffect(() => {
+	fitMap()
+})
+
+function fitMap() {
 	const bounds: L.LatLngBounds = L.featureGroup(
 		points.value.map((e) => new L.Marker([e.lat, e.lng])),
 	).getBounds()
@@ -46,7 +55,7 @@ watchEffect(() => {
 		]
 		routerMap.value?.leafletObject?.fitBounds(tmp)
 	}
-})
+}
 
 </script>
 
@@ -86,6 +95,7 @@ watchEffect(() => {
 				:key="pointKey(result)"
 				:name="pointKey(result)"
 				:lat-lng="result"
+				z-index-offset="1000"
 				:attribution="`{ &quot;locationId&quot;: ${pointKey(result)} }`"
 			>
 				<l-icon
