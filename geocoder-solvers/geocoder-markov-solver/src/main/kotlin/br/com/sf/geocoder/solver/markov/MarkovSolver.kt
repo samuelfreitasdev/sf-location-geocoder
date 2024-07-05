@@ -14,17 +14,6 @@ class MarkovSolver : Solver() {
 		initialSolution: GeocoderSolution, config: SolverConfig
 	): Flow<GeocoderSolution> {
 		return callbackFlow {
-
-//			val markovExecutor = MonteCarloMarkovChain(
-//				numberOfSamples = 1000,
-//				numberOfWarmupSamples = 500
-//			)
-//
-//			val points = initialSolution.problem.points
-//
-//			val inferredLat = markovExecutor.solve(points.map { it.lat })
-//			val inferredLng = markovExecutor.solve(points.map { it.lng })
-
 			val coordinate = MetropolisHastings().solve(
 				initialSolution.problem.points
 			)

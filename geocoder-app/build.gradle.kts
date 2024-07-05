@@ -17,7 +17,7 @@ dependencies {
 
 	implementation(project(":geocoder-core"))
 	implementation(project(":geocoder-repository"))
-	implementation(project(":geocoder-solver"))
+	implementation(project(":geocoder-solvers:geocoder-markov-solver"))
 
 	implementation(libs.kotlin.coroutines.reactive)
 	implementation(libs.bundles.spring) {

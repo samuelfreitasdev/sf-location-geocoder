@@ -2,7 +2,7 @@ package br.com.sf.geocoder.core.domain.model
 
 import java.util.*
 
-data class Coordinate(
+open class Coordinate(
 	val lat: Double,
 	val lng: Double
 ) {
@@ -10,6 +10,12 @@ data class Coordinate(
 		val EMPTY = Coordinate(0.0, 0.0)
 	}
 }
+
+class SuggestedCoordinate(
+	lat: Double,
+	lng: Double,
+	val confidence: Double
+) : Coordinate(lat = lat, lng = lng)
 
 data class GeocoderSummary(
 	val id: Long,

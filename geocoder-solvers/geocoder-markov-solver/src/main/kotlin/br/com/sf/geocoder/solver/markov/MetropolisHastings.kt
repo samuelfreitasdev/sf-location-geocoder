@@ -1,10 +1,12 @@
 package br.com.sf.geocoder.solver.markov
 
 import br.com.sf.geocoder.core.domain.model.Coordinate
+import br.com.sf.geocoder.core.domain.model.SuggestedCoordinate
 import org.apache.commons.math3.distribution.NormalDistribution
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics
 import java.util.*
+import kotlin.math.sqrt
 
 
 class MetropolisHastings(
@@ -22,22 +24,27 @@ class MetropolisHastings(
 
 	fun solve(
 		value: List<Coordinate>
-	): Coordinate {
+	): SuggestedCoordinate {
 
 		val latitudes = value.map { it.lat }
 			.toDoubleArray()
 		val longitudes = value.map { it.lng }
 			.toDoubleArray()
 
-		return Coordinate(
-			lat = solve(latitudes),
-			lng = solve(longitudes)
+		val lat = solve(latitudes)
+		val lng = solve(longitudes)
+		val confidence: Double = minOf(lat.confidence, lng.confidence)
+
+		return SuggestedCoordinate(
+			lat = lat.value,
+			lng = lng.value,
+			confidence = confidence
 		)
 	}
 
 	private fun solve(
 		value: DoubleArray
-	): Double {
+	): Result {
 
 		val totalIterations = numSamples
 
@@ -60,29 +67,37 @@ class MetropolisHastings(
 			}
 		}
 
-		println(statistics)
+//		println(statistics)
+//		println("Confidence Interval: ${confidenceInterval(statistics)}")
 
-		return statistics.mean
+		return Result(
+			value = statistics.mean,
+			confidence = confidenceInterval(statistics)
+		)
 	}
 
-	/*
-	private fun solve(
-			value: DoubleArray
-		): Double {
+	private fun confidenceInterval(
+		statistics: SummaryStatistics,
+	): Double {
+		val numSamples = statistics.n
 
-			val statisticsBefore = SummaryStatistics()
-			value.onEach(statisticsBefore::addValue)
-			println(statisticsBefore)
+//		# Calculate the within-chain variance
+		val W = statistics.mean
 
-			val distribution = NormalDistribution(statisticsBefore.mean, 0.1)
+//		# Calculate the between-chain variance
+		val B = numSamples * statistics.standardDeviation
 
-			TDistribution
+//		# Estimate the marginal posterior variance
+		val V = ((numSamples - 1).toDouble() / numSamples.toDouble()) * W + (1 / numSamples) * B
 
-	//		distribution.sample()
+//		# Calculate R-hat
+		val r_hat = sqrt(V / W)
 
+		return r_hat
+	}
 
-			return 12.0
-		}
-
-	*/
+	data class Result(
+		val value: Double,
+		val confidence: Double,
+	)
 }

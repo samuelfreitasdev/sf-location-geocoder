@@ -8,4 +8,5 @@ include("geocoder-webcli")
 include("geocoder-core")
 include("geocoder-app")
 include("geocoder-repository")
-include("geocoder-solver")
+
+include("geocoder-solvers:geocoder-markov-solver")

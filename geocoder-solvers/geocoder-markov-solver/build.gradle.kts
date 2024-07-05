@@ -11,4 +11,6 @@ dependencies {
 	implementation("org.jfree:jfreechart:1.5.5")
 
 	runtimeOnly(libs.slf4j)
+
+	testImplementation(libs.bundles.junit)
 }
