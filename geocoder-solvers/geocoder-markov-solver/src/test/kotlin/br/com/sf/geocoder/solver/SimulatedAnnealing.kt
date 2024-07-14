@@ -10,7 +10,6 @@ class SimulatedAnnealing {
 	// Initial and final temperature
 	var T: Double = 1.0
 
-
 	// Simulated Annealing parameters
 	// Temperature at which iteration terminates
 	val Tmin: Double = .0001
