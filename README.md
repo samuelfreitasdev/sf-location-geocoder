@@ -1,6 +1,6 @@
 # Smart Geocoder Inference Engine
 
-Sample CVRP Application using Kotlin + Optaplanner/Timefold/Jsprit/Or-Tools/Jenetics + Graphhopper + Spring Boot + Apache Camel + Jooq
+Sample CVRP Application using Kotlin + Spring Boot + Apache Camel + Jooq
 
 ## What is?
 
