@@ -33,20 +33,11 @@ class SolverService(
 	suspend fun enqueueSolverRequest(problemId: Long, solverName: String): UUID? {
 		return solverRepository.enqueue(problemId, solverName)?.let { request ->
 			solverRepository.currentSolutionRequest(problemId)?.let { solution ->
-//				solverEventsPort.enqueueSolutionRequest(
-//					SolutionRequestCommand(solution, true)
-//				)
 				solverEventsPort.enqueueRequestSolver(
 					RequestSolverCommand(solution.solution, request.requestKey, solverName)
 				)
 			}
-//
-//			solverRepository.currentDetailedSolution(problemId)?.let { detailedSolution ->
-//				solverEventsPort.enqueueRequestSolver(
-//					RequestSolverCommand(detailedSolution, request.requestKey, solverName)
-//				)
 			request.requestKey
-//			}
 		}
 	}
 

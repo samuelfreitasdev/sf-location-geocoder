@@ -47,9 +47,6 @@ class GeocoderProblemJooqAdapter(
 			.groupBy(GEOCODER_PROBLEM)
 			.limit(offset, limit).asFlow().map { (p, t, e, r, f, c) ->
 				toProblem(p).let {
-//					val totalCapacity = it.vehicles.sumOf { v -> v.capacity }
-//					val totalDemand = it.customers.sumOf { c -> c.demand }
-//					val (nl, nv) = it.nLocations to it.nVehicles
 					GeocoderSummary(
 						id = it.id,
 						name = it.name,

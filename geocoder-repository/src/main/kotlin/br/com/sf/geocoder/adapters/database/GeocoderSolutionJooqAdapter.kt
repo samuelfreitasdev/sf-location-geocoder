@@ -1,6 +1,10 @@
 package br.com.sf.geocoder.adapters.database
 
-import br.com.sf.geocoder.core.domain.model.*
+import br.com.sf.geocoder.core.domain.model.Coordinate
+import br.com.sf.geocoder.core.domain.model.GeocoderProblem
+import br.com.sf.geocoder.core.domain.model.GeocoderSolution
+import br.com.sf.geocoder.core.domain.model.GeocoderSolutionRequest
+import br.com.sf.geocoder.core.domain.model.SolverStatus
 import br.com.sf.geocoder.core.domain.ports.repo.GeocoderSolutionPort
 import br.com.sf.geocoder.core.serialization.Serde
 import br.com.sf.geocoder.core.serialization.fromJson
@@ -76,7 +80,6 @@ class GeocoderSolutionJooqAdapter(
 			requestKey
 		)
 	}
-
 
 	override suspend fun upsertSolution(
 		problemId: Long,
