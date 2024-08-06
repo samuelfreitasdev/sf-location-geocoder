@@ -49,11 +49,7 @@ dependencies {
 
 tasks {
 	processResources {
-//		val webCli = ":opta-router-webcli"
-//		val isLocalProfile = project.isLocalProfile.also {
-//			if (!it) dependsOn("$webCli:build")
-//		}
-
+		dependsOn(":geocoder-webcli:build")
 		doLast {
 			val resourceDest = layout.buildDirectory.dir("resources/main").get()
 
@@ -75,7 +71,7 @@ tasks {
 //					from(webCliOrigin)
 //					into(webCliDest)
 //				}
-//				logger.quiet("Cli Resources: move from $webCliOrigin to $webCliDest")
+				logger.quiet("Cli Resources: move from $webCliOrigin to $webCliDest")
 //			}
 		}
 	}
