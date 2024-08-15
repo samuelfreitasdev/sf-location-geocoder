@@ -71,7 +71,7 @@ tasks {
 //					from(webCliOrigin)
 //					into(webCliDest)
 //				}
-				logger.quiet("Cli Resources: move from $webCliOrigin to $webCliDest")
+//				logger.quiet("Cli Resources: move from $webCliOrigin to $webCliDest")
 //			}
 		}
 	}
