@@ -28,3 +28,21 @@ The `geocoder-solvers` module contains several submodules that uses different so
 Problems List
 
 Solver View
+
+### How to run
+
+To run the project, you need to have a PostgreSQL database running. You can use the compose.yaml to start a docker container:
+
+```shell
+
+docker-compose -f compose.yaml up
+
+```
+
+After that, you can run the application using the following command:
+
+```shell  
+
+./gradlew :geocoder-app:bootRun
+
+```
