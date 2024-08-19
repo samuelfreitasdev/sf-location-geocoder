@@ -49,6 +49,7 @@ dependencies {
 
 tasks {
 	processResources {
+		val webCli = ":geocoder-webcli"
 		dependsOn(":geocoder-webcli:build")
 		doLast {
 			val resourceDest = layout.buildDirectory.dir("resources/main").get()
@@ -65,13 +66,13 @@ tasks {
 				logger.quiet("Replacing properties resources")
 			}
 //			if (!isLocalProfile) {
-//				val webCliOrigin = project(webCli).layout.buildDirectory.get()
-//				val webCliDest = "$resourceDest/public"
-//				copy {
-//					from(webCliOrigin)
-//					into(webCliDest)
-//				}
-//				logger.quiet("Cli Resources: move from $webCliOrigin to $webCliDest")
+				val webCliOrigin = project(webCli).layout.buildDirectory.get()
+				val webCliDest = "$resourceDest/public"
+				copy {
+					from(webCliOrigin)
+					into(webCliDest)
+				}
+				logger.quiet("Cli Resources: move from $webCliOrigin to $webCliDest")
 //			}
 		}
 	}
