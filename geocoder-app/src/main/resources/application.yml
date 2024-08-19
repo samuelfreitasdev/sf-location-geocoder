@@ -1,3 +1,4 @@
+
 spring:
   output:
     ansi:
@@ -28,6 +29,9 @@ spring:
     config: classpath:hazelcast.yaml
   jmx:
     enabled: true
+  docker:
+    compose:
+      enabled: false
 
 camel:
   springboot:

@@ -15,7 +15,8 @@ tasks {
         dependsOn(npmInstall)
         group = "application"
         description = "Run the client app"
-        args.set(listOf("run", "dev"))
+        args.set(listOf("run", "build"))
+//        args.set(listOf("run", "dev"))
     }
 
     register<NpmTask>("build") {
