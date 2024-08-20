@@ -6,21 +6,24 @@ import br.com.sf.geocoder.core.solver.SolverService
 import io.github.oshai.kotlinlogging.KLogging
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/solver")
 class SolverController(
 	private val solverService: SolverService,
 ) : KLogging() {
-
 	@GetMapping("/solver-names", produces = [MediaType.APPLICATION_JSON_VALUE])
 	fun solverNames() = solverService.solverNames().sorted()
 
 	@PostMapping("/{id}/solve/{solverName}", produces = [MediaType.APPLICATION_JSON_VALUE])
 	suspend fun solve(
 		@PathVariable id: Long,
-		@PathVariable solverName: String
+		@PathVariable solverName: String,
 	): ResponseEntity<SolverStatus> {
 		val uuid = solverService.enqueueSolverRequest(id, solverName)
 		logger.info { "Solver request enqueued with id: $uuid" }
@@ -28,13 +31,17 @@ class SolverController(
 	}
 
 	@PostMapping("/{id}/terminate", produces = [MediaType.APPLICATION_JSON_VALUE])
-	suspend fun terminate(@PathVariable id: Long): ResponseEntity<SolverStatus> {
+	suspend fun terminate(
+		@PathVariable id: Long,
+	): ResponseEntity<SolverStatus> {
 		solverService.currentSolutionRequest(id)?.also { it.solverKey?.also { key -> solverService.terminate(key) } }
 		return ResponseEntity.ok(solverService.showStatus(id))
 	}
 
 	@PostMapping("/{id}/clean", produces = [MediaType.APPLICATION_JSON_VALUE])
-	suspend fun clear(@PathVariable id: Long): ResponseEntity<SolverStatus> {
+	suspend fun clear(
+		@PathVariable id: Long,
+	): ResponseEntity<SolverStatus> {
 		solverService.currentSolutionRequest(id)?.also { it.solverKey?.also { key -> solverService.clear(key) } }
 		return ResponseEntity.ok(solverService.showStatus(id))
 	}
@@ -42,11 +49,10 @@ class SolverController(
 	@GetMapping("/{id}/solution", produces = [MediaType.APPLICATION_JSON_VALUE])
 	suspend fun solutionState(
 		@PathVariable id: Long,
-//		@Parameter(hidden = true) session: WebSession
+// 		@Parameter(hidden = true) session: WebSession
 	): ResponseEntity<GeocoderSolutionRequest> {
 		return solverService.currentSolutionRequest(id)
 			?.let { ResponseEntity.ok(it) }
 			?: ResponseEntity.notFound().build()
 	}
-
 }

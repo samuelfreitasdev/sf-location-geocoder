@@ -13,22 +13,18 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class RepositoryConfig {
-
 	@Bean
 	fun geocoderProblemRepository(
 		serde: Serde,
-		dslContext: DSLContext
+		dslContext: DSLContext,
 	): GeocoderProblemPort = GeocoderProblemJooqAdapter(dslContext, serde)
 
 	@Bean
 	fun geocoderSolutionRepository(
 		serde: Serde,
-		dslContext: DSLContext
+		dslContext: DSLContext,
 	): GeocoderSolutionPort = GeocoderSolutionJooqAdapter(serde, dslContext)
 
 	@Bean
-	fun geocoderSolverRequestRepository(
-		dslContext: DSLContext
-	): GeocoderRequestPort = GeocoderRequestJooqAdapter(dslContext)
-
+	fun geocoderSolverRequestRepository(dslContext: DSLContext): GeocoderRequestPort = GeocoderRequestJooqAdapter(dslContext)
 }

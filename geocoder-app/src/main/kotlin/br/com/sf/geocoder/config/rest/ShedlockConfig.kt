@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ShedlockConfig {
-
 	@Bean
 	fun lockProvider(hazelcastInstance: HazelcastInstance): HazelcastLockProvider {
 		return HazelcastLockProvider(hazelcastInstance)

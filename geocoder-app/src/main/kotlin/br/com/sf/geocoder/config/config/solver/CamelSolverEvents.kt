@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class CamelSolverEvents : RouteBuilder() {
-
 	override fun configure() {
 		from("{{camel.route.consumer.request-solver}}")
 			.routeId("request.solver.queue")
@@ -22,5 +21,4 @@ class CamelSolverEvents : RouteBuilder() {
 			.process(UnwrapStreamProcessor())
 			.end()
 	}
-
 }

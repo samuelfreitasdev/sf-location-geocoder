@@ -17,9 +17,8 @@ import java.util.concurrent.TimeUnit
 @EnableSchedulerLock(defaultLockAtMostFor = "5m")
 class SolverRequestScheduler(
 	@Value("\${solver.termination.time-limit}") private val timeLimit: Duration,
-	private val geocoderRequestPort: GeocoderRequestPort
+	private val geocoderRequestPort: GeocoderRequestPort,
 ) {
-
 	@Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
 	@SchedulerLock(name = "refreshAbandonedSolverRequests", lockAtLeastFor = "5m")
 	fun refreshAbandonedSolverRequests() {
@@ -32,5 +31,4 @@ class SolverRequestScheduler(
 	companion object {
 		private val logger = KotlinLogging.logger {}
 	}
-
 }

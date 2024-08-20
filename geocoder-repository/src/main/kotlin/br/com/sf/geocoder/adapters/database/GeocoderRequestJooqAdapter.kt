@@ -12,12 +12,11 @@ import org.jooq.DSLContext
 import org.jooq.generated.tables.references.GEOCODER_SOLVER_REQUEST
 import java.time.Duration
 import java.time.Instant
-import java.util.*
+import java.util.UUID
 
 class GeocoderRequestJooqAdapter(
 	private val dsl: DSLContext,
 ) : GeocoderRequestPort {
-
 	override suspend fun refreshSolverRequests(timeout: Duration): Int {
 		return dsl
 			.update(GEOCODER_SOLVER_REQUEST)
@@ -28,23 +27,25 @@ class GeocoderRequestJooqAdapter(
 	}
 
 	override suspend fun createRequest(request: GeocoderRequest): GeocoderRequest? {
-		val (numEnqueued) = dsl.selectCount().from(GEOCODER_SOLVER_REQUEST)
-			.where(GEOCODER_SOLVER_REQUEST.PROBLEM_ID.eq(request.problemId))
-			.and(GEOCODER_SOLVER_REQUEST.STATUS.`in`(SolverStatus.ENQUEUED.name, SolverStatus.RUNNING.name))
-			.awaitSingle()
+		val (numEnqueued) =
+			dsl.selectCount().from(GEOCODER_SOLVER_REQUEST)
+				.where(GEOCODER_SOLVER_REQUEST.PROBLEM_ID.eq(request.problemId))
+				.and(GEOCODER_SOLVER_REQUEST.STATUS.`in`(SolverStatus.ENQUEUED.name, SolverStatus.RUNNING.name))
+				.awaitSingle()
 
-//		if (numEnqueued > 0) return null
+// 		if (numEnqueued > 0) return null
 
 		val now = Instant.now()
-		val result = dsl.insertInto(GEOCODER_SOLVER_REQUEST)
-			.set(GEOCODER_SOLVER_REQUEST.REQUEST_KEY, request.requestKey)
-			.set(GEOCODER_SOLVER_REQUEST.PROBLEM_ID, request.problemId)
-			.set(GEOCODER_SOLVER_REQUEST.SOLVER, request.solver)
-			.set(GEOCODER_SOLVER_REQUEST.STATUS, request.status.name)
-			.set(GEOCODER_SOLVER_REQUEST.CREATED_AT, now)
-			.set(GEOCODER_SOLVER_REQUEST.UPDATED_AT, now)
-			.returning()
-			.awaitFirstOrNull()
+		val result =
+			dsl.insertInto(GEOCODER_SOLVER_REQUEST)
+				.set(GEOCODER_SOLVER_REQUEST.REQUEST_KEY, request.requestKey)
+				.set(GEOCODER_SOLVER_REQUEST.PROBLEM_ID, request.problemId)
+				.set(GEOCODER_SOLVER_REQUEST.SOLVER, request.solver)
+				.set(GEOCODER_SOLVER_REQUEST.STATUS, request.status.name)
+				.set(GEOCODER_SOLVER_REQUEST.CREATED_AT, now)
+				.set(GEOCODER_SOLVER_REQUEST.UPDATED_AT, now)
+				.returning()
+				.awaitFirstOrNull()
 
 		return request.takeIf { result != null }
 	}
@@ -60,7 +61,7 @@ class GeocoderRequestJooqAdapter(
 					requestKey = it.requestKey,
 					problemId = it.problemId,
 					solver = it.solver,
-					status = SolverStatus.valueOf(it.status)
+					status = SolverStatus.valueOf(it.status),
 				)
 			}
 	}
@@ -76,12 +77,15 @@ class GeocoderRequestJooqAdapter(
 					requestKey = it.requestKey,
 					problemId = it.problemId,
 					solver = it.solver,
-					status = SolverStatus.valueOf(it.status)
+					status = SolverStatus.valueOf(it.status),
 				)
 			}
 	}
 
-	override fun requestsByProblemIdAndSolverName(problemId: Long, solverName: String): Flow<GeocoderRequest> {
+	override fun requestsByProblemIdAndSolverName(
+		problemId: Long,
+		solverName: String,
+	): Flow<GeocoderRequest> {
 		return dsl.selectFrom(GEOCODER_SOLVER_REQUEST)
 			.where(GEOCODER_SOLVER_REQUEST.PROBLEM_ID.eq(problemId))
 			.and(GEOCODER_SOLVER_REQUEST.SOLVER.eq(solverName))
@@ -92,7 +96,7 @@ class GeocoderRequestJooqAdapter(
 					requestKey = it.requestKey,
 					problemId = it.problemId,
 					solver = it.solver,
-					status = SolverStatus.valueOf(it.status)
+					status = SolverStatus.valueOf(it.status),
 				)
 			}
 	}

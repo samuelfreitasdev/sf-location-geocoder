@@ -24,10 +24,13 @@ import org.jooq.impl.DSL.count as dslCount
 
 class GeocoderProblemJooqAdapter(
 	private val dsl: DSLContext,
-	private val mapper: Serde
+	private val mapper: Serde,
 ) : GeocoderProblemPort {
-
-	override fun findAll(query: String, offset: Int, limit: Int): Flow<GeocoderSummary> {
+	override fun findAll(
+		query: String,
+		offset: Int,
+		limit: Int,
+	): Flow<GeocoderSummary> {
 		val sumStatuses = { status: SolverStatus ->
 			sum(`when`(GEOCODER_SOLVER_REQUEST.STATUS.eq(status.name), 1).otherwise(0)).cast(Int::class.java)
 		}
@@ -39,7 +42,7 @@ class GeocoderProblemJooqAdapter(
 				sumStatuses(SolverStatus.ENQUEUED),
 				sumStatuses(SolverStatus.RUNNING),
 				sumStatuses(SolverStatus.TERMINATED),
-				sumStatuses(SolverStatus.NOT_SOLVED)
+				sumStatuses(SolverStatus.NOT_SOLVED),
 			)
 			.from(GEOCODER_PROBLEM)
 			.leftJoin(GEOCODER_SOLVER_REQUEST).on(GEOCODER_SOLVER_REQUEST.PROBLEM_ID.eq(GEOCODER_PROBLEM.ID))
@@ -55,17 +58,18 @@ class GeocoderProblemJooqAdapter(
 						numRunningRequests = f,
 						numTerminatedRequests = c,
 						numNotSolvedRequests = t,
-						numSolverRequests = 0
+						numSolverRequests = 0,
 					)
 				}
 			}
 	}
 
 	override suspend fun count(query: String): Long {
-		val (total) = dsl.selectCount()
-			.from(GEOCODER_PROBLEM)
-			.where(GEOCODER_PROBLEM.NAME.likeIgnoreCase("${query.trim()}%"))
-			.awaitSingle()
+		val (total) =
+			dsl.selectCount()
+				.from(GEOCODER_PROBLEM)
+				.where(GEOCODER_PROBLEM.NAME.likeIgnoreCase("${query.trim()}%"))
+				.awaitSingle()
 		return total.toLong()
 	}
 
@@ -100,7 +104,10 @@ class GeocoderProblemJooqAdapter(
 			.awaitFirstOrNull()
 	}
 
-	override suspend fun update(id: Long, problem: GeocoderProblem) {
+	override suspend fun update(
+		id: Long,
+		problem: GeocoderProblem,
+	) {
 		val now = Instant.now()
 
 		dsl.update(GEOCODER_PROBLEM)
@@ -115,7 +122,7 @@ class GeocoderProblemJooqAdapter(
 		return GeocoderProblem(
 			id = p.id!!,
 			name = p.name,
-			points = mapper.fromJson(p.points.data())
+			points = mapper.fromJson(p.points.data()),
 		)
 	}
 }

@@ -5,10 +5,9 @@ import br.com.sf.geocoder.core.domain.model.SolverStatus
 import com.hazelcast.nio.serialization.compact.CompactReader
 import com.hazelcast.nio.serialization.compact.CompactSerializer
 import com.hazelcast.nio.serialization.compact.CompactWriter
-import java.util.*
+import java.util.UUID
 
 class CancelSolverCommandSerializer : CompactSerializer<CancelSolverCommand> {
-
 	override fun read(reader: CompactReader): CancelSolverCommand {
 		val solverKey = reader.readString("solverKey")
 		val currentStatus = SolverStatus.valueOf(reader.readString("currentStatus")!!)
@@ -16,7 +15,10 @@ class CancelSolverCommandSerializer : CompactSerializer<CancelSolverCommand> {
 		return CancelSolverCommand(UUID.fromString(solverKey), currentStatus, clear)
 	}
 
-	override fun write(writer: CompactWriter, cmd: CancelSolverCommand) {
+	override fun write(
+		writer: CompactWriter,
+		cmd: CancelSolverCommand,
+	) {
 		writer.writeString("solverKey", cmd.solverKey.toString())
 		writer.writeString("currentStatus", cmd.currentStatus.toString())
 		writer.writeBoolean("clear", cmd.clear)
@@ -29,5 +31,4 @@ class CancelSolverCommandSerializer : CompactSerializer<CancelSolverCommand> {
 	override fun getCompactClass(): Class<CancelSolverCommand> {
 		return CancelSolverCommand::class.java
 	}
-
 }

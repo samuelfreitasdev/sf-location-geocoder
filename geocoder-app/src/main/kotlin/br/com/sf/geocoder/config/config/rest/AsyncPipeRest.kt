@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component
 @Component
 class AsyncPipeRest(
 	private val solverService: SolverService,
-//	private val webSocketHandler: WebSocketHandler
+// 	private val webSocketHandler: WebSocketHandler
 ) {
-
 	fun update(cmd: SolutionRequestCommand): Publisher<SolutionCommand> {
 		return publish {
 			send(SolutionCommand(solverService.update(cmd.solutionRequest, cmd.clear)))
@@ -21,8 +20,7 @@ class AsyncPipeRest(
 
 	fun broadcast(cmd: SolutionCommand): Publisher<Unit> {
 		return publish {
-//TODO			webSocketHandler.broadcast(cmd.solutionRequest)
+// TODO			webSocketHandler.broadcast(cmd.solutionRequest)
 		}
 	}
-
 }

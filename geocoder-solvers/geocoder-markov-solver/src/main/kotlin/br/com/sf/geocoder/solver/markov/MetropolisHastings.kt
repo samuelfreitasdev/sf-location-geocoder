@@ -5,14 +5,12 @@ import br.com.sf.geocoder.core.domain.model.SuggestedCoordinate
 import org.apache.commons.math3.distribution.NormalDistribution
 import org.apache.commons.math3.distribution.TDistribution
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics
-import java.util.*
+import java.util.Random
 import kotlin.math.sqrt
-
 
 class MetropolisHastings(
 	private val numSamples: Int = 1_000,
 ) {
-
 	// Define the target distribution (e.g., standard normal distribution)
 	private val targetDistribution = NormalDistribution(0.0, 1.0)
 
@@ -22,14 +20,13 @@ class MetropolisHastings(
 	// Random number generator
 	private val random: Random = Random()
 
-	fun solve(
-		value: List<Coordinate>
-	): SuggestedCoordinate {
-
-		val latitudes = value.map { it.lat }
-			.toDoubleArray()
-		val longitudes = value.map { it.lng }
-			.toDoubleArray()
+	fun solve(value: List<Coordinate>): SuggestedCoordinate {
+		val latitudes =
+			value.map { it.lat }
+				.toDoubleArray()
+		val longitudes =
+			value.map { it.lng }
+				.toDoubleArray()
 
 		val lat = solve(latitudes)
 		val lng = solve(longitudes)
@@ -38,14 +35,11 @@ class MetropolisHastings(
 		return SuggestedCoordinate(
 			lat = lat.value,
 			lng = lng.value,
-			confidence = confidence
+			confidence = confidence,
 		)
 	}
 
-	private fun solve(
-		value: DoubleArray
-	): Result {
-
+	private fun solve(value: DoubleArray): Result {
 		val totalIterations = numSamples
 
 		val statistics = SummaryStatistics()
@@ -61,39 +55,37 @@ class MetropolisHastings(
 
 				// Accept or reject the candidate sample
 				if (random.nextDouble() < acceptanceRatio) {
-//					currentSample = candidateSample
+// 					currentSample = candidateSample
 					statistics.addValue(currentSample)
 				}
 			}
 		}
 
-//		println(statistics)
-//		println("Confidence Interval: ${confidenceInterval(statistics)}")
+// 		println(statistics)
+// 		println("Confidence Interval: ${confidenceInterval(statistics)}")
 
 		return Result(
 			value = statistics.mean,
-			confidence = confidenceInterval(statistics)
+			confidence = confidenceInterval(statistics),
 		)
 	}
 
-	private fun confidenceInterval(
-		statistics: SummaryStatistics,
-	): Double {
+	private fun confidenceInterval(statistics: SummaryStatistics): Double {
 		val numSamples = statistics.n
 
-//		# Calculate the within-chain variance
-		val W = statistics.mean
+// 		# Calculate the within-chain variance
+		val w = statistics.mean
 
-//		# Calculate the between-chain variance
-		val B = numSamples * statistics.standardDeviation
+// 		# Calculate the between-chain variance
+		val b = numSamples * statistics.standardDeviation
 
-//		# Estimate the marginal posterior variance
-		val V = ((numSamples - 1).toDouble() / numSamples.toDouble()) * W + (1 / numSamples) * B
+// 		# Estimate the marginal posterior variance
+		val v = ((numSamples - 1).toDouble() / numSamples.toDouble()) * w + (1 / numSamples) * b
 
-//		# Calculate R-hat
-		val r_hat = sqrt(V / W)
+// 		# Calculate R-hat
+		val rHat = sqrt(v / w)
 
-		return r_hat
+		return rHat
 	}
 
 	data class Result(

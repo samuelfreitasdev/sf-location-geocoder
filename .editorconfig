@@ -10,7 +10,7 @@ charset = utf-8
 # md (GitHub shows code fences with 8 spaces)
 [*.md]
 indent_style = space
-indent_size = 2
+indent_size = 4
 trim_trailing_whitespace = false
 
 [*.java]
@@ -19,6 +19,9 @@ ij_java_imports_layout = $*,|,java.**,|,javax.**,|,org.**,|,com.**,|,com.diffplu
 ij_java_use_single_class_imports = true
 ij_java_class_count_to_use_import_on_demand = 999
 ij_java_names_count_to_use_import_on_demand = 999
+
+[*.kt]
+wildcard_import_limit = 999
 
 [*.xml.mustache]
 indent_style = space

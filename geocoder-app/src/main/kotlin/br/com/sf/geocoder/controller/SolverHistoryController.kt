@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/solver-history")
 class SolverHistoryController(
 	private val geocoderRequestPort: GeocoderRequestPort,
-	private val geocoderSolutionPort: GeocoderSolutionPort
+	private val geocoderSolutionPort: GeocoderSolutionPort,
 ) {
-
 	@GetMapping("/{problemId}/requests/{solverName}", produces = [MediaType.APPLICATION_JSON_VALUE])
 	fun requests(
 		@PathVariable problemId: Long,
-		@PathVariable solverName: String
+		@PathVariable solverName: String,
 	): ResponseEntity<Flow<GeocoderRequest>> {
 		return geocoderRequestPort.requestsByProblemIdAndSolverName(problemId, solverName).let {
 			ResponseEntity.ok(it)
@@ -31,12 +30,11 @@ class SolverHistoryController(
 
 	@GetMapping("/{problemId}/solutions", produces = [MediaType.APPLICATION_JSON_VALUE])
 	suspend fun solutions(
-		@PathVariable problemId: Long
+		@PathVariable problemId: Long,
 	): ResponseEntity<Coordinate> {
 		return geocoderSolutionPort.currentSolution(problemId)
 			.let {
 				ResponseEntity.ok(it)
 			}
 	}
-
 }

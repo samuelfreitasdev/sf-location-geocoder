@@ -7,21 +7,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class MarkovSolver : Solver() {
-
 	override val name: String = NAME
 
 	override fun solveFlow(
-		initialSolution: GeocoderSolution, config: SolverConfig
+		initialSolution: GeocoderSolution,
+		config: SolverConfig,
 	): Flow<GeocoderSolution> {
 		return callbackFlow {
-			val coordinate = MetropolisHastings().solve(
-				initialSolution.problem.points
-			)
+			val coordinate =
+				MetropolisHastings().solve(
+					initialSolution.problem.points,
+				)
 
-			val result = GeocoderSolution(
-				initialSolution.problem,
-				coordinate,
-			)
+			val result =
+				GeocoderSolution(
+					initialSolution.problem,
+					coordinate,
+				)
 			send(result)
 			close()
 		}
@@ -30,5 +32,4 @@ class MarkovSolver : Solver() {
 	companion object {
 		const val NAME = "MarkovSolver"
 	}
-
 }

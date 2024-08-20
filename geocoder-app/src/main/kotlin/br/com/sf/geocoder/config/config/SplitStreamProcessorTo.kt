@@ -10,8 +10,8 @@ import org.apache.camel.component.reactive.streams.api.CamelReactiveStreams
 import org.reactivestreams.Publisher
 
 internal class SplitStreamProcessorTo(private val uri: String, context: CamelContext) : Processor {
-
 	private val camelReactive = CamelReactiveStreams.get(context)
+
 	override fun process(exchange: Exchange) {
 		val body = exchange.`in`.body
 		if (body is Publisher<*>) {

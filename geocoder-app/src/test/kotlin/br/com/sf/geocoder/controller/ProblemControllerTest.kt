@@ -15,30 +15,29 @@ import org.springframework.test.web.reactive.server.returnResult
 import org.testcontainers.containers.PostgreSQLContainer
 import java.util.Collections.singletonList
 
-
+// @Testcontainers
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Testcontainers
 class ProblemControllerTest {
-
 	companion object {
-		private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>("postgres:15-alpine")
-			.apply {
-				withDatabaseName("sf-location-geocoder")
-				withUsername("postgres")
-				withPassword("postgres")
-			}
+		private val postgres: PostgreSQLContainer<*> =
+			PostgreSQLContainer<Nothing>("postgres:15-alpine")
+				.apply {
+					withDatabaseName("sf-location-geocoder")
+					withUsername("postgres")
+					withPassword("postgres")
+				}
 
 		@JvmStatic
 		@BeforeAll
-		fun beforeAll(): Unit {
+		fun beforeAll() {
 			postgres.start()
 		}
 
 		@JvmStatic
 		@AfterAll
-		fun afterAll(): Unit {
+		fun afterAll() {
 			postgres.stop()
 		}
 	}
@@ -60,8 +59,8 @@ class ProblemControllerTest {
 			0L,
 			"Teste",
 			singletonList(
-				Coordinate(1.0, 1.0)
-			)
+				Coordinate(1.0, 1.0),
+			),
 		)
 	}
 
@@ -94,5 +93,4 @@ class ProblemControllerTest {
 			.exchange()
 			.expectStatus().isOk
 	}
-
 }

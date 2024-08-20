@@ -8,12 +8,10 @@ import java.time.Duration
 
 @Configuration
 class SolverManagerConfig {
-
 	@Bean(destroyMethod = "destroy")
 	fun vrpSolverManager(
-		@Value("\${solver.termination.time-limit:60}") timeLimit: Duration
+		@Value("\${solver.termination.time-limit:60}") timeLimit: Duration,
 	): SolverManager {
 		return SolverManager(timeLimit)
 	}
-
 }

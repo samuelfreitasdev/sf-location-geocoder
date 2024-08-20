@@ -1,10 +1,10 @@
 package br.com.sf.geocoder.core.domain.model
 
-import java.util.*
+import java.util.UUID
 
 open class Coordinate(
 	val lat: Double,
-	val lng: Double
+	val lng: Double,
 ) {
 	companion object {
 		val EMPTY = Coordinate(0.0, 0.0)
@@ -14,7 +14,7 @@ open class Coordinate(
 class SuggestedCoordinate(
 	lat: Double,
 	lng: Double,
-	val confidence: Double
+	val confidence: Double,
 ) : Coordinate(lat = lat, lng = lng)
 
 data class GeocoderSummary(
@@ -23,52 +23,55 @@ data class GeocoderSummary(
 	val nLocations: Int,
 	val numEnqueuedRequests: Int,
 	val numRunningRequests: Int,
-
 	val numTerminatedRequests: Int,
 	val numNotSolvedRequests: Int,
-	val numSolverRequests: Int
+	val numSolverRequests: Int,
 )
 
 data class GeocoderProblem(
 	val id: Long,
 	val name: String = "",
-	val points: List<Coordinate> = emptyList()
+	val points: List<Coordinate> = emptyList(),
 )
 
 data class GeocoderRequest(
 	val requestKey: UUID,
 	val problemId: Long,
 	val solver: String,
-	val status: SolverStatus
+	val status: SolverStatus,
 )
 
 data class GeocoderSolutionRequest(
 	val solution: GeocoderSolution,
 	val status: SolverStatus,
-	val solverKey: UUID? = null
+	val solverKey: UUID? = null,
 ) {
 	companion object {
-		val EMPTY = GeocoderSolutionRequest(
-			GeocoderSolution(
-				GeocoderProblem(
-					-1,
-					"",
-					emptyList()
+		val EMPTY =
+			GeocoderSolutionRequest(
+				GeocoderSolution(
+					GeocoderProblem(
+						-1,
+						"",
+						emptyList(),
+					),
+					Coordinate.EMPTY,
 				),
-				Coordinate.EMPTY
-			),
-			SolverStatus.NOT_SOLVED
-		)
+				SolverStatus.NOT_SOLVED,
+			)
 	}
 }
 
 data class GeocoderSolution(
 	val problem: GeocoderProblem,
-	val suggestedCoordinate: Coordinate
+	val suggestedCoordinate: Coordinate,
 ) {
 	fun isEmpty() = suggestedCoordinate == Coordinate.EMPTY
 }
 
 enum class SolverStatus {
-	ENQUEUED, NOT_SOLVED, RUNNING, TERMINATED
+	ENQUEUED,
+	NOT_SOLVED,
+	RUNNING,
+	TERMINATED,
 }

@@ -7,17 +7,19 @@ import br.com.sf.geocoder.core.domain.model.SolverStatus
 import br.com.sf.geocoder.core.domain.ports.repo.GeocoderProblemPort
 import br.com.sf.geocoder.core.domain.ports.repo.GeocoderRequestPort
 import br.com.sf.geocoder.core.domain.ports.repo.GeocoderSolutionPort
-import java.util.*
+import java.util.UUID
 
 class SolverRepository(
 	private val vrpProblemPort: GeocoderProblemPort,
 	private val vrpSolverSolutionPort: GeocoderSolutionPort,
-	private val vrpSolverRequestPort: GeocoderRequestPort
+	private val vrpSolverRequestPort: GeocoderRequestPort,
 ) {
-
-	suspend fun enqueue(problemId: Long, solverName: String): GeocoderRequest? {
+	suspend fun enqueue(
+		problemId: Long,
+		solverName: String,
+	): GeocoderRequest? {
 		return vrpSolverRequestPort.createRequest(
-			GeocoderRequest(UUID.randomUUID(), problemId, solverName, SolverStatus.ENQUEUED)
+			GeocoderRequest(UUID.randomUUID(), problemId, solverName, SolverStatus.ENQUEUED),
 		)
 	}
 
@@ -36,24 +38,23 @@ class SolverRepository(
 	suspend fun addNewSolution(
 		sol: GeocoderSolution,
 		uuid: UUID,
-		solverStatus:
-		SolverStatus,
-		clear: Boolean
+		solverStatus: SolverStatus,
+		clear: Boolean,
 	): GeocoderSolutionRequest {
 		return vrpSolverSolutionPort.upsertSolution(
 			sol.problem.id,
 			solverStatus,
 			sol.suggestedCoordinate,
 			clear,
-			uuid
+			uuid,
 		)
 	}
 
-//	suspend fun currentDetailedSolution(problemId: Long): GeocoderDetailedSolution? {
-//		return vrpProblemPort.getMatrixById(problemId)?.let { currentMatrix ->
-//			vrpSolverSolutionPort.currentSolutionRequest(problemId)?.let { solutionRequest ->
-//				VrpDetailedSolution(solutionRequest.solution, currentMatrix)
-//			}
-//		}
-//	}
+// 	suspend fun currentDetailedSolution(problemId: Long): GeocoderDetailedSolution? {
+// 		return vrpProblemPort.getMatrixById(problemId)?.let { currentMatrix ->
+// 			vrpSolverSolutionPort.currentSolutionRequest(problemId)?.let { solutionRequest ->
+// 				VrpDetailedSolution(solutionRequest.solution, currentMatrix)
+// 			}
+// 		}
+// 	}
 }

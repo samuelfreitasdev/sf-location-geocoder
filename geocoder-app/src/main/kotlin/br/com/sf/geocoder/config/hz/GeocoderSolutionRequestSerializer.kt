@@ -6,7 +6,7 @@ import br.com.sf.geocoder.core.domain.model.SolverStatus
 import com.hazelcast.nio.serialization.compact.CompactReader
 import com.hazelcast.nio.serialization.compact.CompactSerializer
 import com.hazelcast.nio.serialization.compact.CompactWriter
-import java.util.*
+import java.util.UUID
 
 class GeocoderSolutionRequestSerializer : CompactSerializer<GeocoderSolutionRequest> {
 	override fun read(reader: CompactReader): GeocoderSolutionRequest {
@@ -16,7 +16,10 @@ class GeocoderSolutionRequestSerializer : CompactSerializer<GeocoderSolutionRequ
 		return GeocoderSolutionRequest(solution, SolverStatus.valueOf(status), UUID.fromString(solverKey))
 	}
 
-	override fun write(writer: CompactWriter, request: GeocoderSolutionRequest) {
+	override fun write(
+		writer: CompactWriter,
+		request: GeocoderSolutionRequest,
+	) {
 		writer.writeCompact("solution", request.solution)
 		writer.writeString("status", request.status.toString())
 		writer.writeString("solverKey", request.solverKey?.toString())
@@ -29,5 +32,4 @@ class GeocoderSolutionRequestSerializer : CompactSerializer<GeocoderSolutionRequ
 	override fun getCompactClass(): Class<GeocoderSolutionRequest> {
 		return GeocoderSolutionRequest::class.java
 	}
-
 }

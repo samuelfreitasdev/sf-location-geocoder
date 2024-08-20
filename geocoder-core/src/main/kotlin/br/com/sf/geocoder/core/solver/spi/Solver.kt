@@ -5,10 +5,9 @@ import br.com.sf.geocoder.core.solver.SolverConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterNot
-import java.util.*
+import java.util.ServiceLoader
 
 abstract class Solver {
-
 	companion object {
 		fun getNamedSolvers(): Map<String, Solver> {
 			val solverFactories = mutableMapOf<String, Solver>()
@@ -18,15 +17,16 @@ abstract class Solver {
 			return solverFactories
 		}
 
-		fun getSolverByName(solverName: String): Solver = getNamedSolvers()[solverName]
-			?: throw IllegalArgumentException("No solver $solverName was found")
+		fun getSolverByName(solverName: String): Solver =
+			getNamedSolvers()[solverName]
+				?: throw IllegalArgumentException("No solver $solverName was found")
 	}
 
 	abstract val name: String
 
 	fun solve(
 		initialSolution: GeocoderSolution,
-		config: SolverConfig
+		config: SolverConfig,
 	): Flow<GeocoderSolution> =
 		solveFlow(initialSolution, config)
 			.filterNot { it.isEmpty() }
@@ -34,6 +34,6 @@ abstract class Solver {
 
 	protected abstract fun solveFlow(
 		initialSolution: GeocoderSolution,
-		config: SolverConfig
+		config: SolverConfig,
 	): Flow<GeocoderSolution>
 }

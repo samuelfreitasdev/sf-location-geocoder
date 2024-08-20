@@ -5,8 +5,11 @@ import br.com.sf.geocoder.core.domain.model.GeocoderSummary
 import kotlinx.coroutines.flow.Flow
 
 interface GeocoderProblemPort {
-
-	fun findAll(query: String = "", offset: Int = 0, limit: Int = 25): Flow<GeocoderSummary>
+	fun findAll(
+		query: String = "",
+		offset: Int = 0,
+		limit: Int = 25,
+	): Flow<GeocoderSummary>
 
 	suspend fun count(query: String = ""): Long
 
@@ -16,6 +19,8 @@ interface GeocoderProblemPort {
 
 	suspend fun deleteById(problemId: Long)
 
-	suspend fun update(id: Long, problem: GeocoderProblem)
-
+	suspend fun update(
+		id: Long,
+		problem: GeocoderProblem,
+	)
 }

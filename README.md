@@ -41,8 +41,9 @@ docker-compose -f compose.yaml up
 
 After that, you can run the application using the following command:
 
-```shell  
+```shell
 
-./gradlew :geocoder-app:bootRun
+#./gradlew :geocoder-app:bootRun
+./gradlew :build :bootRun
 
 ```

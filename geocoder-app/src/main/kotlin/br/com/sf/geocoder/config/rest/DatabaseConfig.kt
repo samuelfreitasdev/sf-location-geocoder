@@ -26,9 +26,8 @@ import org.springframework.r2dbc.connection.TransactionAwareConnectionFactoryPro
 class DatabaseConfig(
 	@Value("\${spring.jooq.sql-dialect}") private val sqlDialect: SQLDialect,
 	@Value("\${spring.jooq.bind-offset-date-time-type}") private val bindOffsetDateTimeType: Boolean,
-	private val cfi: ConnectionFactory
+	private val cfi: ConnectionFactory,
 ) {
-
 	@Bean
 	@Order(0)
 	fun jooqExceptionTranslatorExecuteListenerProvider(): DefaultExecuteListenerProvider {
@@ -51,11 +50,9 @@ class DatabaseConfig(
 			.dataSource(
 				flywayProperties.url,
 				flywayProperties.user,
-				flywayProperties.password
+				flywayProperties.password,
 			)
 			.locations(*flywayProperties.locations.toTypedArray())
 			.baselineOnMigrate(true)
 			.load()
-
-
 }

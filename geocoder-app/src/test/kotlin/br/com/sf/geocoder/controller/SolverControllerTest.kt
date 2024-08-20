@@ -4,7 +4,12 @@ import br.com.sf.geocoder.core.domain.model.Coordinate
 import br.com.sf.geocoder.core.domain.model.GeocoderProblem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,14 +24,14 @@ import java.util.Collections.singletonList
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SolverControllerTest {
-
 	companion object {
-		val postgres: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>("postgres:15-alpine")
-			.apply {
-				withDatabaseName("sf-location-geocoder")
-				withUsername("postgres")
-				withPassword("postgres")
-			}
+		val postgres: PostgreSQLContainer<*> =
+			PostgreSQLContainer<Nothing>("postgres:15-alpine")
+				.apply {
+					withDatabaseName("sf-location-geocoder")
+					withUsername("postgres")
+					withPassword("postgres")
+				}
 
 		@JvmStatic
 		@BeforeAll
@@ -44,19 +49,20 @@ class SolverControllerTest {
 	@Autowired
 	lateinit var webTestClient: WebTestClient
 
-	val DEFAULT_PROBLEM = GeocoderProblem(
-		0L,
-		"Teste",
-		singletonList(
-			Coordinate(1.0, 1.0)
+	val defaultProblem =
+		GeocoderProblem(
+			0L,
+			"Teste",
+			singletonList(
+				Coordinate(1.0, 1.0),
+			),
 		)
-	)
 
 	lateinit var problemCreated: GeocoderProblem
 
 	@BeforeEach
 	fun setUp() {
-		problemCreated = `try to submit the problem`(DEFAULT_PROBLEM)
+		problemCreated = `try to submit the problem`(defaultProblem)
 	}
 
 	@AfterEach
@@ -65,11 +71,12 @@ class SolverControllerTest {
 	}
 
 	@Test
-	fun solverTest() = runTest {
-		`request to start the solver for`(problemCreated)
-		`request the problem solution`(problemCreated)
-		delay(5000)
-	}
+	fun solverTest() =
+		runTest {
+			`request to start the solver for`(problemCreated)
+			`request the problem solution`(problemCreated)
+			delay(5000)
+		}
 
 	private fun `try to submit the problem`(problem: GeocoderProblem): GeocoderProblem {
 		return webTestClient.post()
@@ -109,6 +116,5 @@ class SolverControllerTest {
 			.uri("/api/solver/${problem.id}/solve/MarkovSolver")
 			.exchange()
 			.expectStatus().isOk
-
 	}
 }

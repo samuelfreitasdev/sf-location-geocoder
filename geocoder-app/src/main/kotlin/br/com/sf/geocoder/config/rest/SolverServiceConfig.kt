@@ -12,21 +12,19 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SolverServiceConfig {
-
 	@Bean
 	fun solverRepository(
 		solverProblemPort: GeocoderProblemPort,
 		solverSolutionPort: GeocoderSolutionPort,
-		solverRequestPort: GeocoderRequestPort
+		solverRequestPort: GeocoderRequestPort,
 	) = SolverRepository(solverProblemPort, solverSolutionPort, solverRequestPort)
 
 	@Bean
 	fun solverService(
 		solverRepository: SolverRepository,
 		solverEventsPort: SolverEventsPort,
-		broadcastPort: BroadcastPort
+		broadcastPort: BroadcastPort,
 	): SolverService {
 		return SolverService(broadcastPort, solverEventsPort, solverRepository)
 	}
-
 }

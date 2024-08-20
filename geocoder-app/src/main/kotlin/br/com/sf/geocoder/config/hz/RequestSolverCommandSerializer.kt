@@ -5,7 +5,7 @@ import br.com.sf.geocoder.core.domain.model.GeocoderSolution
 import com.hazelcast.nio.serialization.compact.CompactReader
 import com.hazelcast.nio.serialization.compact.CompactSerializer
 import com.hazelcast.nio.serialization.compact.CompactWriter
-import java.util.*
+import java.util.UUID
 
 class RequestSolverCommandSerializer : CompactSerializer<RequestSolverCommand> {
 	override fun read(reader: CompactReader): RequestSolverCommand {
@@ -15,7 +15,10 @@ class RequestSolverCommandSerializer : CompactSerializer<RequestSolverCommand> {
 		return RequestSolverCommand(detailedSolution, UUID.fromString(solverKey), solverName!!)
 	}
 
-	override fun write(writer: CompactWriter, cmd: RequestSolverCommand) {
+	override fun write(
+		writer: CompactWriter,
+		cmd: RequestSolverCommand,
+	) {
 		writer.writeCompact("detailedSolution", cmd.solution)
 		writer.writeString("solverKey", cmd.solverKey.toString())
 		writer.writeString("solverName", cmd.solverName)

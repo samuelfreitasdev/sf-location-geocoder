@@ -6,17 +6,14 @@ import org.apache.camel.component.hazelcast.HazelcastOperation
 import org.apache.camel.component.reactive.streams.util.UnwrapStreamProcessor
 import org.springframework.stereotype.Component
 
-
 @Component
 class CamelRestEvents : RouteBuilder() {
-
 	override fun configure() {
-
 		from("{{camel.route.consumer.enqueue-request-solver}}")
 			.routeId("enqueue.request.solver")
 			.log("Enqueue request solver: \${body}")
 			.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-//			.transform().spel("#{body.item}")
+// 			.transform().spel("#{body.item}")
 			.to("{{camel.route.producer.request-solver}}")
 
 		from("{{camel.route.consumer.enqueue-solution-request}}")
@@ -52,5 +49,4 @@ class CamelRestEvents : RouteBuilder() {
 			.log("Request canceled: \${body}")
 			.to("{{camel.route.producer.cancel-solver-topic}}")
 	}
-
 }

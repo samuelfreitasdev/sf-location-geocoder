@@ -11,16 +11,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import java.time.Duration
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentHashMap
 
 private val logger = KotlinLogging.logger {}
 
 class SolverManager(timeLimit: Duration) {
-
 	private class UserCancellationException(val clear: Boolean) : CancellationException("User cancellation command.")
 
 	private val supervisorJob = SupervisorJob()
@@ -32,9 +37,8 @@ class SolverManager(timeLimit: Duration) {
 	fun solve(
 		solverKey: UUID,
 		solution: GeocoderSolution,
-		solverName: String
+		solverName: String,
 	): Flow<SolutionRequestCommand> {
-
 		if (blackListedKeys.remove(solverKey)) {
 			val cmd = wrapCommand(GeocoderSolutionRequest(solution, SolverStatus.TERMINATED, solverKey))
 			return flowOf(cmd)
@@ -45,27 +49,32 @@ class SolverManager(timeLimit: Duration) {
 		val channel = Channel<SolutionRequestCommand>()
 		var bestSolution = solution
 
-		solverKeys[solverKey] = Solver
-			.getSolverByName(solverName)
-			.solve(solution, solverConfig)
-			.onEach {
-				bestSolution = it
-				logger.info { "onEach: $solverKey | ${bestSolution.suggestedCoordinate} ($solverName)" }
-				channel.send(wrapCommand(GeocoderSolutionRequest(it, SolverStatus.RUNNING, solverKey)))
-			}
-			.onCompletion { ex ->
-				logger.info { "onEnd: $solverKey | ${bestSolution.suggestedCoordinate} ($solverName)" }
-				val solRequest = GeocoderSolutionRequest(bestSolution, SolverStatus.TERMINATED, solverKey)
-				val shouldClear = ex is UserCancellationException && ex.clear
-				channel.send(wrapCommand(solRequest, shouldClear))
-				channel.close()
-			}
-			.launchIn(managerScope)
+		solverKeys[solverKey] =
+			Solver
+				.getSolverByName(solverName)
+				.solve(solution, solverConfig)
+				.onEach {
+					bestSolution = it
+					logger.info { "onEach: $solverKey | ${bestSolution.suggestedCoordinate} ($solverName)" }
+					channel.send(wrapCommand(GeocoderSolutionRequest(it, SolverStatus.RUNNING, solverKey)))
+				}
+				.onCompletion { ex ->
+					logger.info { "onEnd: $solverKey | ${bestSolution.suggestedCoordinate} ($solverName)" }
+					val solRequest = GeocoderSolutionRequest(bestSolution, SolverStatus.TERMINATED, solverKey)
+					val shouldClear = ex is UserCancellationException && ex.clear
+					channel.send(wrapCommand(solRequest, shouldClear))
+					channel.close()
+				}
+				.launchIn(managerScope)
 
 		return channel.receiveAsFlow()
 	}
 
-	suspend fun cancelSolver(solverKey: UUID, currentStatus: SolverStatus, clear: Boolean) {
+	suspend fun cancelSolver(
+		solverKey: UUID,
+		currentStatus: SolverStatus,
+		clear: Boolean,
+	) {
 		if (currentStatus == SolverStatus.ENQUEUED) blackListedKeys.add(solverKey)
 		solverKeys.remove(solverKey)?.let {
 			it.cancel(UserCancellationException(clear))
@@ -77,7 +86,8 @@ class SolverManager(timeLimit: Duration) {
 		supervisorJob.cancel()
 	}
 
-	private fun wrapCommand(solutionRequest: GeocoderSolutionRequest, clear: Boolean = false) =
-		SolutionRequestCommand(solutionRequest, clear)
-
+	private fun wrapCommand(
+		solutionRequest: GeocoderSolutionRequest,
+		clear: Boolean = false,
+	) = SolutionRequestCommand(solutionRequest, clear)
 }

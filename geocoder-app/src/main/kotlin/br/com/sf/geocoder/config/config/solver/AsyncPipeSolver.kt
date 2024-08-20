@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class AsyncPipeSolver(
-	private val solverManager: SolverManager
+	private val solverManager: SolverManager,
 ) {
-
 	fun solve(cmd: RequestSolverCommand): Publisher<SolutionRequestCommand> {
 		return solverManager.solve(cmd.solverKey, cmd.solution, cmd.solverName).asPublisher()
 	}
