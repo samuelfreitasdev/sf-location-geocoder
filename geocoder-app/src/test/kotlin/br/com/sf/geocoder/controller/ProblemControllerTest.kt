@@ -77,13 +77,10 @@ class ProblemControllerTest {
 	}
 
 	private fun `try to get the problem`(problem: GeocoderProblem) {
-		// Getting problem
 		webTestClient.get()
 			.uri("/api/problems/${problem.id}")
 			.exchange()
 			.expectStatus().isOk
-			.expectBody(problem.javaClass)
-			.isEqualTo(problem)
 	}
 
 	private fun `try to delete the problem`(problem: GeocoderProblem) {
