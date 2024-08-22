@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends { id: number }">
 import type { Page } from '../api'
 import { ref, type StyleValue, toRefs, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

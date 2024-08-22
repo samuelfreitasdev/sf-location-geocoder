@@ -87,7 +87,7 @@ function fitMap() {
 				:key="pointKey(result)"
 				:name="pointKey(result)"
 				:lat-lng="result"
-				z-index-offset="1000"
+				:z-index-offset="1000"
 				:attribution="`{ &quot;locationId&quot;: ${pointKey(result)} }`"
 			>
 				<l-icon icon-url="/result.svg" :icon-size="[40, 40]" :icon-anchor="[20, 40]" />
