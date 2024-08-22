@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { GeocoderPageLayout } from '../../layout'
 import GeocoderProblemForm from './ProblemForm/GeocoderProblemForm.vue'
 import { EditableProblem } from '../../api'
@@ -8,7 +7,7 @@ import { useRoute } from 'vue-router'
 import { type AfterFetchContext, useFetch } from '@vueuse/core'
 
 const props = defineProps<{
-	mode: 'copy' | 'create' | 'update';
+	mode: 'copy' | 'create' | 'update'
 }>()
 
 const { mode } = toRefs(props)
@@ -22,9 +21,7 @@ const defaultProblem: EditableProblem = {
 }
 
 const problemUrl = computed(() => `/api/problems/${route.params.id}`)
-const persistUrl = computed(() =>
-	mode.value !== 'create' ? `${problemUrl.value}/${mode.value}` : '/api/problems',
-)
+const persistUrl = computed(() => (mode.value !== 'create' ? `${problemUrl.value}/${mode.value}` : '/api/problems'))
 
 const { isFetching, error, data } = useFetch(problemUrl, {
 	initialData: defaultProblem,

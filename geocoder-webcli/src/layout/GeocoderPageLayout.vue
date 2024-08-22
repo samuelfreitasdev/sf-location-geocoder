@@ -1,12 +1,10 @@
 <script setup lang="ts">
-
 import { AlertMessage } from '../components'
 
 const props = defineProps<{
-	isFetching: boolean | null;
-	error: unknown | null;
+	isFetching: boolean | null
+	error: unknown | null
 }>()
-
 </script>
 
 <template>

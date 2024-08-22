@@ -31,7 +31,7 @@ const categories: Record<string, 'light' | 'dark'> = [...themesCategory.keys()].
 		...acc,
 		...themesCategory.get(cat)?.reduce((ac, theme) => ({ ...ac, [theme]: cat }), {}),
 	}),
-	{},
+	{}
 )
 
 const localThemes = Object.keys(categories).sort()
@@ -41,7 +41,7 @@ const modes = localThemes.reduce(
 		...acc,
 		[mode]: mode,
 	}),
-	{},
+	{}
 )
 
 export { categories, localThemes, modes }

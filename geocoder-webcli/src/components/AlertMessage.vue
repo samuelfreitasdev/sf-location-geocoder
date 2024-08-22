@@ -1,22 +1,21 @@
 <script setup lang="ts">
-
 import { ref, toRefs } from 'vue'
 import { TransitionPresets, useTransition } from '@vueuse/core'
 
 const props = withDefaults(
 	defineProps<{
-		message: string;
-		variant?: 'info' | 'success' | 'warning' | 'error';
-		closable?: boolean;
+		message: string
+		variant?: 'info' | 'success' | 'warning' | 'error'
+		closable?: boolean
 	}>(),
 	{
 		variant: 'info',
 		closable: true,
-	},
+	}
 )
 
 const emit = defineEmits<{
-	(e: 'close'): void;
+	(e: 'close'): void
 }>()
 
 const { message, variant } = toRefs(props)
@@ -50,7 +49,6 @@ function closeAlert() {
 	isOpen.value = false
 	emit('close')
 }
-
 </script>
 
 <template>

@@ -61,6 +61,7 @@ tasks {
 				into(resourceDest)
 				logger.quiet("Replacing properties resources")
 			}
+
 			val webCliOrigin = project(webCli).layout.buildDirectory.get()
 			val webCliDest = "$resourceDest/public"
 			copy {

@@ -48,11 +48,7 @@ addIcons(
 	MdWarningamberRound,
 	OiGear,
 	MdPlayarrow,
-	MdRemovecircle,
+	MdRemovecircle
 )
 
-createApp(App)
-	.use(router)
-	.component('apexchart', VueApexCharts)
-	.component('v-icon', OhVueIcon)
-	.mount('#app')
+createApp(App).use(router).component('apexchart', VueApexCharts).component('v-icon', OhVueIcon).mount('#app')

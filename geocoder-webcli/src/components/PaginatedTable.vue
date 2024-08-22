@@ -1,21 +1,20 @@
 <script setup lang="ts">
-
 import type { Page } from '../api'
 import { ref, type StyleValue, toRefs, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const props = withDefaults(
 	defineProps<{
-		page: Page<T> | null;
-		selected?: T | null;
-		style?: StyleValue;
-		isEditing?: boolean;
+		page: Page<T> | null
+		selected?: T | null
+		style?: StyleValue
+		isEditing?: boolean
 	}>(),
 	{
 		selected: null,
 		isEditing: false,
 		style: undefined,
-	},
+	}
 )
 
 const { page, isEditing, selected, style } = toRefs(props)
@@ -64,7 +63,6 @@ function next() {
 function last() {
 	paginate(Math.max((page?.value?.totalPages || 0) - 1, 0))
 }
-
 </script>
 
 <template>
@@ -72,25 +70,25 @@ function last() {
 		<div class="overflow-y-auto overflow-x-hidden" :style="style">
 			<table class="table table-sm table-zebra w-full">
 				<thead>
-				<tr>
-					<slot name="head"></slot>
-				</tr>
+					<tr>
+						<slot name="head"></slot>
+					</tr>
 				</thead>
 				<tbody v-for="(row, idx) in page?.content || []" :key="idx">
-				<tr v-if="isSelectedRow(row)" class="bg-primary-content">
-					<slot name="edit" :item="selected"></slot>
-				</tr>
-				<tr
-					v-else
-					:class="`${idx === hoveredLine ? 'hover' : ''}`"
-					@mouseenter="() => (hoveredLine = idx)"
-					@mouseleave="() => (hoveredLine = null)"
-				>
-					<slot name="show" :idx="idx" :row="row"></slot>
-				</tr>
+					<tr v-if="isSelectedRow(row)" class="bg-primary-content">
+						<slot name="edit" :item="selected"></slot>
+					</tr>
+					<tr
+						v-else
+						:class="`${idx === hoveredLine ? 'hover' : ''}`"
+						@mouseenter="() => (hoveredLine = idx)"
+						@mouseleave="() => (hoveredLine = null)"
+					>
+						<slot name="show" :idx="idx" :row="row"></slot>
+					</tr>
 				</tbody>
 				<tfoot>
-				<slot name="foot"></slot>
+					<slot name="foot"></slot>
 				</tfoot>
 			</table>
 		</div>
@@ -119,7 +117,4 @@ function last() {
 	</div>
 </template>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>

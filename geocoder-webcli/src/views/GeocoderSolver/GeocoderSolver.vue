@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { GeocoderPageLayout, GeocoderSolverPanelLayout } from '../../layout'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -25,13 +24,21 @@ const cleanUrl = computed(() => `/api/solver/${route.params.id}/clean`)
 const { data: problem } = useFetch(problemUrl, { immediate: true }).get().json<GeocoderProblem>()
 
 const { execute: fetchProblem, data: solution } = useFetch(solutionPanelUrl, {
-	refetch: refetchSolution, afterFetch: afterFetchSolution, immediate: true, timeout: 5000, updateDataOnError: true,
-}).get().json<GeocoderSolutionRequest>()
+	refetch: refetchSolution,
+	afterFetch: afterFetchSolution,
+	immediate: true,
+	timeout: 5000,
+	updateDataOnError: true,
+})
+	.get()
+	.json<GeocoderSolutionRequest>()
 
 const { isFetching, data: solvers } = useFetch(solverNamesUrl, {
 	initialData: [],
 	immediate: true,
-}).get().json<string[]>()
+})
+	.get()
+	.json<string[]>()
 
 const { data: solveStatus, execute: solve } = useFetch(solveUrl, { immediate: false }).post().json<string>()
 const { execute: terminate } = useFetch(terminateUrl, { immediate: false }).post().json<string>()
@@ -81,7 +88,7 @@ watchOnce(solvers, () => {
 			<template #menu>
 				<solver-panel
 					v-model:selected-solver="selectedSolver"
-					:solution="solution?.solution as GeocoderSolution | null"
+					:solution="solution?.solution as GeocoderSolution"
 					:problem="problem"
 					:solvers="solvers || []"
 					:solver-status="solverStatus"
@@ -94,7 +101,7 @@ watchOnce(solvers, () => {
 			<template #main>
 				<solver-map
 					v-if="(problem?.points || []).length > 0"
-					:solution="solution?.solution as GeocoderSolution | null"
+					:solution="solution?.solution as GeocoderSolution"
 					:problem="problem"
 				/>
 			</template>

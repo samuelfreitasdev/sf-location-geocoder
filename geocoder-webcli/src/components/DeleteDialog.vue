@@ -1,19 +1,18 @@
 <script setup lang="ts">
-
 import { computed, ref, toRefs, watch } from 'vue'
 import { useFetch } from '@vueuse/core'
 
 const props = defineProps<{
-	open: boolean;
-	message: string;
-	url: string;
+	open: boolean
+	message: string
+	url: string
 }>()
 
 const emit = defineEmits<{
-	(e: 'update:url', val: string): void;
-	(e: 'update:open', val: boolean): void;
-	(e: 'successRemove'): void;
-	(e: 'failRemove', val: unknown): void;
+	(e: 'update:url', val: string): void
+	(e: 'update:open', val: boolean): void
+	(e: 'successRemove'): void
+	(e: 'failRemove', val: unknown): void
 }>()
 
 const { open, message, url } = toRefs(props)
@@ -55,7 +54,6 @@ watch(removeError, (error) => {
 		emit('failRemove', error)
 	}
 })
-
 </script>
 
 <template>
@@ -78,7 +76,4 @@ watch(removeError, (error) => {
 	</dialog>
 </template>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import 'leaflet/dist/leaflet.css'
 import * as L from 'leaflet'
 import { LIcon, LMap, LMarker, LPolygon, LPopup, LTileLayer } from '@vue-leaflet/vue-leaflet'
@@ -10,7 +9,7 @@ import { watchArray } from '@vueuse/core'
 
 const props = defineProps<{
 	solution: GeocoderSolution | null | undefined
-	problem: GeocoderProblem | null;
+	problem: GeocoderProblem | null
 }>()
 
 const points = computed(() => props.problem?.points || [])
@@ -44,9 +43,7 @@ watchEffect(() => {
 })
 
 function fitMap() {
-	const bounds: L.LatLngBounds = L.featureGroup(
-		points.value.map((e) => new L.Marker([e.lat, e.lng])),
-	).getBounds()
+	const bounds: L.LatLngBounds = L.featureGroup(points.value.map((e) => new L.Marker([e.lat, e.lng]))).getBounds()
 
 	if (bounds.isValid()) {
 		const tmp = [
@@ -56,11 +53,10 @@ function fitMap() {
 		routerMap.value?.leafletObject?.fitBounds(tmp)
 	}
 }
-
 </script>
 
 <template>
-	<div style="height:100%; min-height: 600px">
+	<div style="height: 100%; min-height: 600px">
 		<l-map
 			ref="routerMap"
 			v-model:zoom="zoom"
@@ -78,11 +74,7 @@ function fitMap() {
 				:lat-lng="point"
 				:attribution="`{ &quot;locationIds&quot;: ${pointKey(point)} }`"
 			>
-				<l-icon
-					icon-url="/point.svg"
-					:icon-size="[40,40]"
-					:icon-anchor="[20, 38]"
-				/>
+				<l-icon icon-url="/point.svg" :icon-size="[40, 40]" :icon-anchor="[20, 38]" />
 				<l-popup :key="pointKey(point)">
 					<div>
 						<span> {{ index }}: {{ pointKey(point) }} </span>
@@ -98,11 +90,7 @@ function fitMap() {
 				z-index-offset="1000"
 				:attribution="`{ &quot;locationId&quot;: ${pointKey(result)} }`"
 			>
-				<l-icon
-					icon-url="/result.svg"
-					:icon-size="[40,40]"
-					:icon-anchor="[20, 40]"
-				/>
+				<l-icon icon-url="/result.svg" :icon-size="[40, 40]" :icon-anchor="[20, 40]" />
 			</l-marker>
 		</l-map>
 	</div>

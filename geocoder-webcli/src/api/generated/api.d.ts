@@ -5,352 +5,351 @@
 
 export interface paths {
 	'/api/problems/{id}/update': {
-		put: operations['update'];
-	};
+		put: operations['update']
+	}
 	'/api/solver/{id}/terminate': {
 		/** @deprecated */
-		post: operations['terminate'];
-	};
+		post: operations['terminate']
+	}
 	'/api/solver/{id}/solve/{solverName}': {
 		/** @deprecated */
-		post: operations['solve'];
-	};
+		post: operations['solve']
+	}
 	'/api/solver/{id}/clean': {
 		/** @deprecated */
-		post: operations['clear'];
-	};
+		post: operations['clear']
+	}
 	'/api/problems/{id}/copy': {
-		post: operations['copy'];
-	};
+		post: operations['copy']
+	}
 	'/api/problems': {
-		get: operations['index'];
-		post: operations['create'];
-	};
+		get: operations['index']
+		post: operations['create']
+	}
 	'/api/solver/{id}/solution': {
 		/** @deprecated */
-		get: operations['solutionState'];
-	};
+		get: operations['solutionState']
+	}
 	'/api/solver/solver-names': {
 		/** @deprecated */
-		get: operations['solverNames'];
-	};
+		get: operations['solverNames']
+	}
 	'/api/solver-history/{problemId}/solutions': {
-		get: operations['solutions'];
-	};
+		get: operations['solutions']
+	}
 	'/api/solver-history/{problemId}/requests/{solverName}': {
-		get: operations['requests'];
-	};
+		get: operations['requests']
+	}
 	'/api/problems/{id}': {
-		get: operations['show'];
-		delete: operations['remove'];
-	};
+		get: operations['show']
+		delete: operations['remove']
+	}
 }
 
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 
 export interface components {
 	schemas: {
 		Coordinate: {
 			/** Format: double */
-			lat: number;
+			lat: number
 			/** Format: double */
-			lng: number;
-		};
+			lng: number
+		}
 		GeocoderProblem: {
 			/** Format: int64 */
-			id: number;
-			name: string;
-			points: components['schemas']['Coordinate'][];
-		};
+			id: number
+			name: string
+			points: components['schemas']['Coordinate'][]
+		}
 		GeocoderSolution: {
-			problem: components['schemas']['GeocoderProblem'];
-			suggestedCoordinate: components['schemas']['Coordinate'];
-			isEmpty: boolean;
-		};
+			problem: components['schemas']['GeocoderProblem']
+			suggestedCoordinate: components['schemas']['Coordinate']
+			isEmpty: boolean
+		}
 		GeocoderSolutionRequest: {
-			solution: components['schemas']['GeocoderSolution'];
+			solution: components['schemas']['GeocoderSolution']
 			/** @enum {string} */
-			status: 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED';
+			status: 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED'
 			/** Format: uuid */
-			solverKey?: string;
-		};
+			solverKey?: string
+		}
 		GeocoderRequest: {
 			/** Format: uuid */
-			requestKey: string;
+			requestKey: string
 			/** Format: int64 */
-			problemId: number;
-			solver: string;
+			problemId: number
+			solver: string
 			/** @enum {string} */
-			status: 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED';
-		};
+			status: 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED'
+		}
 		GeocoderSummary: {
 			/** Format: int64 */
-			id: number;
-			name: string;
+			id: number
+			name: string
 			/** Format: int32 */
-			nLocations?: number;
+			nLocations?: number
 			/** Format: int32 */
-			numEnqueuedRequests: number;
+			numEnqueuedRequests: number
 			/** Format: int32 */
-			numRunningRequests: number;
+			numRunningRequests: number
 			/** Format: int32 */
-			numTerminatedRequests: number;
+			numTerminatedRequests: number
 			/** Format: int32 */
-			numNotSolvedRequests: number;
+			numNotSolvedRequests: number
 			/** Format: int32 */
-			numSolverRequests: number;
+			numSolverRequests: number
 			/** Format: int32 */
-			nlocations: number;
-		};
+			nlocations: number
+		}
 		PageGeocoderSummary: {
 			/** Format: int32 */
-			totalPages?: number;
+			totalPages?: number
 			/** Format: int64 */
-			totalElements?: number;
+			totalElements?: number
 			/** Format: int32 */
-			size?: number;
-			content?: components['schemas']['GeocoderSummary'][];
-			sort?: components['schemas']['SortObject'];
-			first?: boolean;
-			last?: boolean;
+			size?: number
+			content?: components['schemas']['GeocoderSummary'][]
+			sort?: components['schemas']['SortObject']
+			first?: boolean
+			last?: boolean
 			/** Format: int32 */
-			number?: number;
-			pageable?: components['schemas']['PageableObject'];
+			number?: number
+			pageable?: components['schemas']['PageableObject']
 			/** Format: int32 */
-			numberOfElements?: number;
-			empty?: boolean;
-		};
+			numberOfElements?: number
+			empty?: boolean
+		}
 		PageableObject: {
 			/** Format: int64 */
-			offset?: number;
-			sort?: components['schemas']['SortObject'];
+			offset?: number
+			sort?: components['schemas']['SortObject']
 			/** Format: int32 */
-			pageNumber?: number;
+			pageNumber?: number
 			/** Format: int32 */
-			pageSize?: number;
-			paged?: boolean;
-			unpaged?: boolean;
-		};
+			pageSize?: number
+			paged?: boolean
+			unpaged?: boolean
+		}
 		SortObject: {
-			empty?: boolean;
-			sorted?: boolean;
-			unsorted?: boolean;
-		};
-	};
-	responses: never;
-	parameters: never;
-	requestBodies: never;
-	headers: never;
-	pathItems: never;
+			empty?: boolean
+			sorted?: boolean
+			unsorted?: boolean
+		}
+	}
+	responses: never
+	parameters: never
+	requestBodies: never
+	headers: never
+	pathItems: never
 }
 
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 
-export type external = Record<string, never>;
+export type external = Record<string, never>
 
 export interface operations {
-
 	update: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['GeocoderProblem'];
-			};
-		};
+				'application/json': components['schemas']['GeocoderProblem']
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
-				content: never;
-			};
-		};
-	};
+				content: never
+			}
+		}
+	}
 	/** @deprecated */
 	terminate: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED';
-				};
-			};
-		};
-	};
+					'application/json': 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED'
+				}
+			}
+		}
+	}
 	/** @deprecated */
 	solve: {
 		parameters: {
 			path: {
-				id: number;
-				solverName: string;
-			};
-		};
+				id: number
+				solverName: string
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED';
-				};
-			};
-		};
-	};
+					'application/json': 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED'
+				}
+			}
+		}
+	}
 	/** @deprecated */
 	clear: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED';
-				};
-			};
-		};
-	};
+					'application/json': 'ENQUEUED' | 'NOT_SOLVED' | 'RUNNING' | 'TERMINATED'
+				}
+			}
+		}
+	}
 	copy: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['GeocoderProblem'];
-			};
-		};
+				'application/json': components['schemas']['GeocoderProblem']
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
-				content: never;
-			};
-		};
-	};
+				content: never
+			}
+		}
+	}
 	index: {
 		parameters: {
 			query?: {
-				page?: number;
-				size?: number;
-				q?: string;
-			};
-		};
+				page?: number
+				size?: number
+				q?: string
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': components['schemas']['PageGeocoderSummary'];
-				};
-			};
-		};
-	};
+					'application/json': components['schemas']['PageGeocoderSummary']
+				}
+			}
+		}
+	}
 	create: {
 		requestBody: {
 			content: {
-				'application/json': components['schemas']['GeocoderProblem'];
-			};
-		};
+				'application/json': components['schemas']['GeocoderProblem']
+			}
+		}
 		responses: {
 			/** @description Created */
 			201: {
 				content: {
-					'application/json': components['schemas']['GeocoderProblem'];
-				};
-			};
-		};
-	};
+					'application/json': components['schemas']['GeocoderProblem']
+				}
+			}
+		}
+	}
 	/** @deprecated */
 	solutionState: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': components['schemas']['GeocoderSolutionRequest'];
-				};
-			};
-		};
-	};
+					'application/json': components['schemas']['GeocoderSolutionRequest']
+				}
+			}
+		}
+	}
 	/** @deprecated */
 	solverNames: {
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': string[];
-				};
-			};
-		};
-	};
+					'application/json': string[]
+				}
+			}
+		}
+	}
 	solutions: {
 		parameters: {
 			path: {
-				problemId: number;
-			};
-		};
+				problemId: number
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': components['schemas']['Coordinate'];
-				};
-			};
-		};
-	};
+					'application/json': components['schemas']['Coordinate']
+				}
+			}
+		}
+	}
 	requests: {
 		parameters: {
 			path: {
-				problemId: number;
-				solverName: string;
-			};
-		};
+				problemId: number
+				solverName: string
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': components['schemas']['GeocoderRequest'][];
-				};
-			};
-		};
-	};
+					'application/json': components['schemas']['GeocoderRequest'][]
+				}
+			}
+		}
+	}
 	show: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
 				content: {
-					'application/json': components['schemas']['GeocoderProblem'];
-				};
-			};
-		};
-	};
+					'application/json': components['schemas']['GeocoderProblem']
+				}
+			}
+		}
+	}
 	remove: {
 		parameters: {
 			path: {
-				id: number;
-			};
-		};
+				id: number
+			}
+		}
 		responses: {
 			/** @description OK */
 			200: {
-				content: never;
-			};
-		};
-	};
+				content: never
+			}
+		}
+	}
 }

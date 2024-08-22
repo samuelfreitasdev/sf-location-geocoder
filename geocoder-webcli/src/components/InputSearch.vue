@@ -1,10 +1,9 @@
 <script setup lang="ts">
-
 import { ref, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const props = defineProps<{
-	query: string;
+	query: string
 }>()
 
 const { query } = toRefs(props)

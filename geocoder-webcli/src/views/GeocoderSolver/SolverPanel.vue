@@ -1,32 +1,25 @@
 <script setup lang="ts">
-
 import { computed, ref, type StyleValue, toRefs } from 'vue'
 import { type GeocoderProblem, type GeocoderSolution } from '../../api'
 import { until } from '@vueuse/core'
 
 const props = defineProps<{
-	solution: GeocoderSolution | null | undefined;
-	problem: GeocoderProblem | null;
-	solverStatus: string | null;
-	selectedSolver: string;
-	solvers: string[];
-	style?: StyleValue;
+	solution: GeocoderSolution | null | undefined
+	problem: GeocoderProblem | null
+	solverStatus: string | null
+	selectedSolver: string
+	solvers: string[]
+	style?: StyleValue
 }>()
 
 const emit = defineEmits<{
-	(e: 'onSolve'): void;
-	(e: 'onTerminate'): void;
-	(e: 'onClear'): void;
-	(e: 'update:selectedSolver', val: string): void;
+	(e: 'onSolve'): void
+	(e: 'onTerminate'): void
+	(e: 'onClear'): void
+	(e: 'update:selectedSolver', val: string): void
 }>()
 
-const {
-	problem,
-	solverStatus,
-	selectedSolver,
-	solvers,
-	style,
-} = toRefs(props)
+const { problem, solverStatus, selectedSolver, solvers, style } = toRefs(props)
 
 const editorSelectedSolver = computed({
 	get: () => selectedSolver.value,
@@ -79,16 +72,8 @@ async function wrapperClear() {
 		<div class="flex space-x-2">
 			<label class="relative inline-flex items-center mb-4 cursor-pointer">
 				<span class="mr-3 text-sm font-medium">Solver</span>
-				<select
-					v-model="editorSelectedSolver"
-					class="select select-bordered select-xs w-full max-w-xs"
-				>
-					<option
-						v-for="(solver, index) in solvers"
-						:key="solver"
-						:value="solver"
-						:selected="index == 0"
-					>
+				<select v-model="editorSelectedSolver" class="select select-bordered select-xs w-full max-w-xs">
+					<option v-for="(solver, index) in solvers" :key="solver" :value="solver" :selected="index == 0">
 						{{ solver }}
 					</option>
 				</select>
@@ -96,25 +81,19 @@ async function wrapperClear() {
 		</div>
 		<div class="flex justify-between">
 			<div class="card-actions">
-				<button
-					class="btn btn-sm btn-success"
-					:disabled="isRunning"
-					@click="$emit('onSolve')"
-				>
+				<button class="btn btn-sm btn-success" :disabled="isRunning" @click="$emit('onSolve')">
 					Solve
 					<span v-if="isRunning" class="loading loading-bars loading-xs"></span>
 				</button>
 				<button
 					:disabled="!isRunning || waitingTermination"
 					class="btn btn-sm btn-warning"
-					@click="wrapperTermination">
+					@click="wrapperTermination"
+				>
 					Terminate
 					<span v-if="waitingTermination" class="loading loading-bars loading-xs"></span>
 				</button>
-				<button
-					:disabled="isRunning || waitingClear"
-					class="btn btn-sm btn-error"
-					@click="wrapperClear">
+				<button :disabled="isRunning || waitingClear" class="btn btn-sm btn-error" @click="wrapperClear">
 					Clear
 					<span v-if="waitingClear" class="loading loading-bars loading-xs"></span>
 				</button>
@@ -125,18 +104,18 @@ async function wrapperClear() {
 				<p>Points:</p>
 				<table class="table table-zebra w-full">
 					<thead>
-					<tr>
-						<th>Index</th>
-						<th>Latitude</th>
-						<th>Longitude</th>
-					</tr>
+						<tr>
+							<th>Index</th>
+							<th>Latitude</th>
+							<th>Longitude</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr v-for="(point, index) in problem?.points || []">
-						<td>{{ index }}</td>
-						<td>{{ point.lat.toFixed(4) }}</td>
-						<td>{{ point.lng.toFixed(4) }}</td>
-					</tr>
+						<tr v-for="(point, index) in problem?.points || []" v-bind:key="index">
+							<td>{{ index }}</td>
+							<td>{{ point.lat.toFixed(4) }}</td>
+							<td>{{ point.lng.toFixed(4) }}</td>
+						</tr>
 					</tbody>
 				</table>
 
@@ -145,21 +124,20 @@ async function wrapperClear() {
 
 					<table class="table table-zebra w-full">
 						<thead>
-						<tr>
-							<th>Latitude</th>
-							<th>Longitude</th>
-						</tr>
+							<tr>
+								<th>Latitude</th>
+								<th>Longitude</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td>{{ solution.suggestedCoordinate.lat.toFixed(4) }}</td>
-							<td>{{ solution.suggestedCoordinate.lng.toFixed(4) }}</td>
-						</tr>
+							<tr>
+								<td>{{ solution.suggestedCoordinate.lat.toFixed(4) }}</td>
+								<td>{{ solution.suggestedCoordinate.lng.toFixed(4) }}</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-
 </template>

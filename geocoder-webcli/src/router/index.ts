@@ -3,7 +3,6 @@ import GeocoderProblems from '../views/GeocoderProblems/GeocoderProblems.vue'
 import ProblemEditor from '../views/GeocoderProblems/ProblemEditor.vue'
 import GeocoderSolver from '../views/GeocoderSolver/GeocoderSolver.vue'
 
-
 const router = createRouter({
 	history: createWebHistory(),
 	routes: [

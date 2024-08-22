@@ -5,14 +5,15 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "vue-tsc && vite build",
 		"build2": "run-p type-check \"build-only {@}\" --",
 		"preview": "vite preview",
 		"build-only": "vite build",
 		"generate-ts-api": "openapi-typescript http://localhost:8080/v3/api-docs.yaml --output src/api/generated/api.d.ts",
-		"type-check": "vue-tsc --build --force",
-		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-		"format": "prettier --write src/"
+		"type-check": "vue-tsc ",
+		"type-check-force": "vue-tsc --build --force",
+		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore . ",
+		"format": "prettier --ignore-path .gitignore --write src/"
 	},
 	"dependencies": {
 		"@headlessui/vue": "^1.7.20",

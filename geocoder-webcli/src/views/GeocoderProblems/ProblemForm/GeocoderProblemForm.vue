@@ -7,16 +7,16 @@ import { useFetch, useVModels } from '@vueuse/core'
 import GeocoderPointsMap from './GeocoderPointsMap.vue'
 
 const props = defineProps<{
-	persistUrl: string;
-	problem: EditableProblem;
-	style?: StyleValue;
+	persistUrl: string
+	problem: EditableProblem
+	style?: StyleValue
 }>()
 
 const emit = defineEmits<{
-	(e: 'update:problem', val: EditableProblem): void;
+	(e: 'update:problem', val: EditableProblem): void
 }>()
 
-const { persistUrl, style } = toRefs(props)
+const { persistUrl } = toRefs(props)
 
 const { problem } = useVModels(props, emit)
 
@@ -64,7 +64,7 @@ function movePoint(prev: Coordinate, updated: Coordinate) {
 	copy.splice(idx, 1, updated)
 	problem.value = {
 		...problem.value,
-		...{ points: sortBy(copy, it => it.lat) },
+		...{ points: sortBy(copy, (it) => it.lat) },
 	}
 }
 
@@ -92,10 +92,7 @@ function pointKey(point: Coordinate) {
 			<div class="">
 				<label for="name" class="block font-bold mb-2"> Name </label>
 				<div>
-					<input v-model="problem.name"
-						   name="name"
-						   class="input input-bordered w-full input-xs"
-					/>
+					<input v-model="problem.name" name="name" class="input input-bordered w-full input-xs" />
 				</div>
 			</div>
 
@@ -107,37 +104,36 @@ function pointKey(point: Coordinate) {
 			</div>
 
 			<div class="overflow-auto" style="max-height: 600px">
-				<table class="table table-sm table-zebra w-full ">
+				<table class="table table-sm table-zebra w-full">
 					<thead>
-					<tr>
-						<th>Latitude</th>
-						<th>Longitude</th>
-						<th></th>
-					</tr>
+						<tr>
+							<th>Latitude</th>
+							<th>Longitude</th>
+							<th></th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr v-for="point in sortBy(problem.points, it => it.lat)" :key="pointKey(point)">
-						<td>
-							<input v-model.number="point.lat"
-								   class="input input-bordered input-xs" />
-						</td>
-						<td>
-							<input v-model.number="point.lng"
-								   class="input input-bordered input-xs" />
-						</td>
-						<td>
-							<div class="tooltip" data-tip="Remove">
-								<button class="primary btn btn-sm btn-circle bg-transparent/15"
-										@click="removePoint(point)">
-									<v-icon name="md-deleteoutline" />
-								</button>
-							</div>
-						</td>
-					</tr>
+						<tr v-for="point in sortBy(problem.points, (it) => it.lat)" :key="pointKey(point)">
+							<td>
+								<input v-model.number="point.lat" class="input input-bordered input-xs" />
+							</td>
+							<td>
+								<input v-model.number="point.lng" class="input input-bordered input-xs" />
+							</td>
+							<td>
+								<div class="tooltip" data-tip="Remove">
+									<button
+										class="primary btn btn-sm btn-circle bg-transparent/15"
+										@click="removePoint(point)"
+									>
+										<v-icon name="md-deleteoutline" />
+									</button>
+								</div>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
-
 
 			<div class="flex flex-row-reverse pt-4">
 				<form class="space-x-2">

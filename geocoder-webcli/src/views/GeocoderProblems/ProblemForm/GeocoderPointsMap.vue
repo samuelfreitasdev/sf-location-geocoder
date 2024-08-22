@@ -6,24 +6,20 @@ import { computed, ref, toRef, watchEffect } from 'vue'
 import type { Coordinate } from '../../../api'
 
 const props = defineProps<{
-	points: Coordinate[];
+	points: Coordinate[]
 }>()
 
 const emit = defineEmits<{
-	(e: 'addPoint', val: Coordinate): void;
-	(e: 'removePoint', val: Coordinate): void;
+	(e: 'addPoint', val: Coordinate): void
+	(e: 'removePoint', val: Coordinate): void
 
-	(e: 'update:selectedPoint', val: Coordinate | null | undefined): void;
-	(e: 'markerClick', val: L.LeafletMouseEvent): void;
+	(e: 'update:selectedPoint', val: Coordinate | null | undefined): void
+	(e: 'markerClick', val: L.LeafletMouseEvent): void
 }>()
 
 const points = computed(() => props.points)
 
-const selectedPoint = toRef<Coordinate | null | undefined>(
-	points.value?.length > 0
-		? points.value[0]
-		: null,
-)
+const selectedPoint = toRef<Coordinate | null | undefined>(points.value?.length > 0 ? points.value[0] : null)
 const componentPoint = computed<Coordinate | null | undefined>({
 	get: () => selectedPoint.value,
 	set: (val) => emit('update:selectedPoint', val),
@@ -52,9 +48,8 @@ function removePoint(point: Coordinate) {
 function markerClickHandler(e: L.LeafletMouseEvent) {
 	if (!componentPoint.value) {
 		const attribution = JSON.parse(e.target.options.attribution)
-		componentPoint.value = points.value?.find((p) =>
-			p.lat.toFixed(4) === attribution.lat.toFixed(4)
-			&& p.lng.toFixed(4) === attribution.lng.toFixed(4),
+		componentPoint.value = points.value?.find(
+			(p) => p.lat.toFixed(4) === attribution.lat.toFixed(4) && p.lng.toFixed(4) === attribution.lng.toFixed(4)
 		)
 		emit('markerClick', e)
 	}
@@ -83,11 +78,10 @@ watchEffect(() => {
 		}
 	}
 })
-
 </script>
 
 <template>
-	<div style="height:100%; min-height: 600px">
+	<div style="height: 100%; min-height: 600px">
 		<l-map
 			ref="routerMap"
 			v-model:zoom="zoom"
@@ -108,10 +102,7 @@ watchEffect(() => {
 				:attribution="`{ &quot;locationId&quot;: ${pointKey(point)} }`"
 				@click="markerClickHandler"
 			>
-				<l-popup
-					v-if="!isHighlighted(point)"
-					:key="pointKey(point)"
-				>
+				<l-popup v-if="!isHighlighted(point)" :key="pointKey(point)">
 					<div>
 						<span>{{ pointKey(point) }}</span>
 						<button class="align-middle ml-1 btn btn-xs btn-circle" @click="removePoint(point)">

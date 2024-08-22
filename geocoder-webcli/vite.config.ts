@@ -20,15 +20,11 @@ export default defineConfig({
 				secure: false,
 				ws: true,
 			},
-
 		},
 	},
-	plugins: [
-		vue(),
-		vueJsx(),
-	],
+	plugins: [vue(), vueJsx()],
 	optimizeDeps: {
-		exclude: ["oh-vue-icons/icons"],
+		exclude: ['oh-vue-icons/icons'],
 	},
 	resolve: {
 		alias: {

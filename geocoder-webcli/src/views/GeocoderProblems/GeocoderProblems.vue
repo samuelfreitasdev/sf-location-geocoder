@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { GeocoderPageLayout } from '../../layout'
 import { type GeocoderSummary, Page } from '../../api'
 
@@ -11,7 +10,7 @@ import { AlertMessage, DeleteDialog, InputSearch, PaginatedTable } from '../../c
 const route = useRoute()
 
 const url = computed(
-	() => `/api/problems?page=${route.query.page || 0}&size=${route.query.size || 10}&q=${route.query.q || ''}`,
+	() => `/api/problems?page=${route.query.page || 0}&size=${route.query.size || 10}&q=${route.query.q || ''}`
 )
 
 const {
@@ -74,17 +73,21 @@ const showDeleteModal = (instance: GeocoderSummary) => {
 						<td>{{ row.nlocations }}</td>
 						<td>{{ row.numSolverRequests }}</td>
 						<td class="space-x-2">
-							<div v-if="row.numEnqueuedRequests > 0"
-								 class="badge badge-warning tooltip"
-								 data-tip="Enqueued">E
+							<div
+								v-if="row.numEnqueuedRequests > 0"
+								class="badge badge-warning tooltip"
+								data-tip="Enqueued"
+							>
+								E
 							</div>
-							<div v-else-if="row.numRunningRequests > 0"
-								 class="badge badge-success tooltip"
-								 data-tip="Running">R
+							<div
+								v-else-if="row.numRunningRequests > 0"
+								class="badge badge-success tooltip"
+								data-tip="Running"
+							>
+								R
 							</div>
-							<div v-else class="badge badge-info tooltip" data-tip="Not Solving">
-								N
-							</div>
+							<div v-else class="badge badge-info tooltip" data-tip="Not Solving">N</div>
 						</td>
 						<td class="space-x-2">
 							<div class="tooltip" data-tip="Solve it">
@@ -119,5 +122,4 @@ const showDeleteModal = (instance: GeocoderSummary) => {
 	</geocoder-page-layout>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
