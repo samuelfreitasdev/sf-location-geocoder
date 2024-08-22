@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.node)
 }
 
-//project.layout.buildDirectory.set(file("dist"))
+project.layout.buildDirectory.set(file("dist"))
 
 node {
     download.set(true)
