@@ -1,5 +1,5 @@
 INSERT INTO geocoder_problem (id, name, points, created_at, updated_at)
-VALUES (1, 'COMERCIAL PRAIA E MAR LTDA', e '[ {
+VALUES (1, 'COMERCIAL PRAIA E MAR LTDA', '[ {
   "lat" : -3.6731382,
   "lng" : -38.6699059
 }, {
@@ -94,4 +94,4 @@ VALUES (1, 'COMERCIAL PRAIA E MAR LTDA', e '[ {
   "lng" : -38.6699282
 } ]', '2024-06-19 22:45:13.924671', '2024-06-19 22:50:22.369237') ON CONFLICT (id) DO NOTHING;
 
-SELECT setval('geocoder_problem_pk_seq', (SELECT max(id) FROM GEOCODER_PROBLEM));
+-- SELECT setval('geocoder_problem_pk_seq', (SELECT max(id) FROM GEOCODER_PROBLEM));
