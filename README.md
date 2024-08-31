@@ -64,7 +64,6 @@ After that, you can run the application using the following command:
 
 ```shell
 
-#./gradlew :geocoder-app:bootRun
 ./gradlew :build :bootRun
 
 ```
