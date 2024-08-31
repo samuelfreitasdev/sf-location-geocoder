@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { GeocoderPageLayout, GeocoderSolverPanelLayout } from '../../layout'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import SolverPanel from './SolverPanel.vue'
 import { type GeocoderProblem, GeocoderSolution, type GeocoderSolutionRequest } from '../../api'
-import { type AfterFetchContext, useFetch, watchOnce } from '@vueuse/core'
+import { type AfterFetchContext, useFetch, useWebSocket, watchOnce } from '@vueuse/core'
 import SolverMap from '../../views/GeocoderSolver/SolverMap.vue'
 
 const route = useRoute()
@@ -12,6 +12,7 @@ const route = useRoute()
 const solverStatus = ref<string | null>(null)
 const selectedSolver = ref<string>('')
 
+const webSocketUrl = computed(() => `ws://${location.host}/ws/solution-state/${route.params.id}`)
 const solutionPanelUrl = computed(() => `/api/solver/${route.params.id}/solution`)
 const refetchSolution = ref(true)
 const solverNamesUrl = ref('/api/solver/solver-names')
@@ -20,6 +21,8 @@ const problemUrl = computed(() => `/api/problems/${route.params.id}`)
 const solveUrl = computed(() => `/api/solver/${route.params.id}/solve/${selectedSolver.value}`)
 const terminateUrl = computed(() => `/api/solver/${route.params.id}/terminate`)
 const cleanUrl = computed(() => `/api/solver/${route.params.id}/clean`)
+
+const { status, data: wsData, open: wsOpen } = useWebSocket<string>(webSocketUrl, { immediate: true })
 
 const { data: problem } = useFetch(problemUrl, { immediate: true }).get().json<GeocoderProblem>()
 
@@ -40,7 +43,11 @@ const { isFetching, data: solvers } = useFetch(solverNamesUrl, {
 	.get()
 	.json<string[]>()
 
-const { data: solveStatus, execute: solve } = useFetch(solveUrl, { immediate: false }).post().json<string>()
+const { data: solveStatus, execute: solve } = useFetch(solveUrl, {
+	immediate: false,
+	afterFetch: afterSolutionFetch,
+}).post().json<string>()
+
 const { execute: terminate } = useFetch(terminateUrl, { immediate: false }).post().json<string>()
 const { execute: clean } = useFetch(cleanUrl, { immediate: false }).post().json<string>()
 
@@ -80,6 +87,20 @@ async function cleanAction() {
 watchOnce(solvers, () => {
 	selectedSolver.value = (solvers.value && solvers.value[0]) || ''
 })
+
+watch(wsData, () => {
+	if (wsData.value) {
+		const payload = JSON.parse(wsData.value)
+		solution.value = payload.solution
+		solverStatus.value = payload.status
+	}
+})
+
+function afterSolutionFetch(ctx: AfterFetchContext) {
+	wsOpen()
+	return ctx
+}
+
 </script>
 
 <template>
@@ -92,6 +113,7 @@ watchOnce(solvers, () => {
 					:problem="problem"
 					:solvers="solvers || []"
 					:solver-status="solverStatus"
+					:ws-status="status"
 					:style="`height: calc(100vh - ${mapFooterHeight})`"
 					@on-solve="solveAction"
 					@on-terminate="terminateAction"

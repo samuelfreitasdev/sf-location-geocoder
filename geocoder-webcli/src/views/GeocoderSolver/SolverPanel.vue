@@ -7,6 +7,7 @@ const props = defineProps<{
 	solution: GeocoderSolution | null | undefined
 	problem: GeocoderProblem | null
 	solverStatus: string | null
+	wsStatus: string | null;
 	selectedSolver: string
 	solvers: string[]
 	style?: StyleValue
@@ -19,7 +20,7 @@ const emit = defineEmits<{
 	(e: 'update:selectedSolver', val: string): void
 }>()
 
-const { problem, solverStatus, selectedSolver, solvers, style } = toRefs(props)
+const { problem, solverStatus, wsStatus, selectedSolver, solvers, style } = toRefs(props)
 
 const editorSelectedSolver = computed({
 	get: () => selectedSolver.value,
@@ -27,7 +28,7 @@ const editorSelectedSolver = computed({
 })
 
 const isRunning = computed(() => ['ENQUEUED', 'RUNNING'].includes(solverStatus.value || ''))
-// const isWsConnected = computed(() => wsStatus.value === "OPEN");
+const isWsConnected = computed(() => wsStatus.value === "OPEN");
 
 const waitingTermination = ref(false)
 const waitingClear = ref(false)
@@ -64,15 +65,15 @@ async function wrapperClear() {
 				<div>
 					<span v-if="solverStatus" class="badge badge-outline">{{ solverStatus }}</span>
 				</div>
-				<!--				<div class="tooltip tooltip-left" :data-tip="`Web Socket ${isWsConnected ? 'connected' : 'disconnected'}`">-->
-				<!--					<span :class="`badge ${isWsConnected ? 'badge-success' : 'badge-error'}`">WS</span>-->
-				<!--				</div>-->
+				<div class="tooltip tooltip-left" :data-tip="`Web Socket ${isWsConnected ? 'connected' : 'disconnected'}`">
+					<span :class="`badge ${isWsConnected ? 'badge-success' : 'badge-error'}`">WS</span>
+				</div>
 			</div>
 		</div>
 		<div class="flex space-x-2">
 			<label class="relative inline-flex items-center mb-4 cursor-pointer">
 				<span class="mr-3 text-sm font-medium">Solver</span>
-				<select v-model="editorSelectedSolver" class="select select-bordered select-xs w-full max-w-xs">
+				<select v-model="editorSelectedSolver" :disabled="!isWsConnected" class="select select-bordered select-xs w-full max-w-xs">
 					<option v-for="(solver, index) in solvers" :key="solver" :value="solver" :selected="index == 0">
 						{{ solver }}
 					</option>
@@ -81,19 +82,23 @@ async function wrapperClear() {
 		</div>
 		<div class="flex justify-between">
 			<div class="card-actions">
-				<button class="btn btn-sm btn-success" :disabled="isRunning" @click="$emit('onSolve')">
+				<button class="btn btn-sm btn-success" :disabled="!isWsConnected || isRunning" @click="$emit('onSolve')">
 					Solve
 					<span v-if="isRunning" class="loading loading-bars loading-xs"></span>
 				</button>
 				<button
-					:disabled="!isRunning || waitingTermination"
+					:disabled="!isWsConnected || !isRunning || waitingTermination"
 					class="btn btn-sm btn-warning"
 					@click="wrapperTermination"
 				>
 					Terminate
 					<span v-if="waitingTermination" class="loading loading-bars loading-xs"></span>
 				</button>
-				<button :disabled="isRunning || waitingClear" class="btn btn-sm btn-error" @click="wrapperClear">
+				<button
+					:disabled="!isWsConnected || isRunning || waitingClear"
+					class="btn btn-sm btn-error"
+					@click="wrapperClear"
+				>
 					Clear
 					<span v-if="waitingClear" class="loading loading-bars loading-xs"></span>
 				</button>
