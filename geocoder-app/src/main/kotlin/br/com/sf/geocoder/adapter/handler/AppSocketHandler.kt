@@ -14,16 +14,14 @@ import org.springframework.web.reactive.socket.WebSocketSession
 import org.springframework.web.util.UriTemplate
 import reactor.core.publisher.Mono
 
-
 private val logger = KotlinLogging.logger {}
 
 @Component
 class AppSocketHandler(private val serde: Serde) : WebSocketHandler {
-
 	private val sharedFlow = MutableSharedFlow<GeocoderSolutionRequest>()
 	private val uriTemplate = UriTemplate("/ws/solution-state/{problemId}")
 
-		override fun handle(session: WebSocketSession): Mono<Void> {
+	override fun handle(session: WebSocketSession): Mono<Void> {
 		val problemId = uriTemplate.match(session.handshakeInfo.uri.path)["problemId"]
 		val source = fromChannel(problemId!!)
 
@@ -45,5 +43,4 @@ class AppSocketHandler(private val serde: Serde) : WebSocketHandler {
 	suspend fun broadcast(data: GeocoderSolutionRequest) {
 		sharedFlow.emit(data)
 	}
-
 }

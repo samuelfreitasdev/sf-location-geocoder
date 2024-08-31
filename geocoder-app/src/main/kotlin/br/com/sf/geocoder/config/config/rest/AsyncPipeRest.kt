@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component
 @Component
 class AsyncPipeRest(
 	private val solverService: SolverService,
-	private val appSocketHandler: AppSocketHandler
+	private val appSocketHandler: AppSocketHandler,
 ) {
-
 	fun update(cmd: SolutionRequestCommand): Publisher<SolutionCommand> {
 		return publish {
 			send(SolutionCommand(solverService.update(cmd.solutionRequest, cmd.clear)))

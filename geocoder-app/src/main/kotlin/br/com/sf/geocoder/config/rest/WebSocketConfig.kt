@@ -7,10 +7,8 @@ import org.springframework.web.reactive.HandlerMapping
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter
 
-
 @Configuration
 class WebSocketConfig {
-
 	@Bean
 	fun handlerMapping(webSocketHandler: AppSocketHandler): HandlerMapping {
 		val map = mapOf("/ws/solution-state/*" to webSocketHandler)
@@ -20,8 +18,8 @@ class WebSocketConfig {
 	@Bean
 	fun handlerAdapter() = WebSocketHandlerAdapter()
 
-//	@Bean
-//	fun serverEndpointExporter(): ServerEndpointExporter {
-//		return ServerEndpointExporter()
-//	}
+// 	@Bean
+// 	fun serverEndpointExporter(): ServerEndpointExporter {
+// 		return ServerEndpointExporter()
+// 	}
 }
