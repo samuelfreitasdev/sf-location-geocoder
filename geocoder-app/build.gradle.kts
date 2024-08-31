@@ -30,9 +30,8 @@ dependencies {
 	developmentOnly(libs.spring.devtools)
 	developmentOnly(libs.spring.compose)
 
-	runtimeOnly(libs.bundles.hawtio)
-	runtimeOnly(libs.netty.all)
-//	runtimeOnly(libs.netty.resolver.dns.native.macos)
+//	runtimeOnly(libs.bundles.hawtio)
+
 	runtimeOnly(libs.slf4j)
 	runtimeOnly(libs.pg.r2dbc)
 	runtimeOnly(libs.pg.jdbc)

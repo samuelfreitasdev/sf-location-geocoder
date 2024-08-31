@@ -3,10 +3,16 @@ kotlin = "1.9.22"
 kotlin-coroutines = "1.8.0"
 kotlin-logging = "6.0.1"
 junit = "5.10.0"
-spring-boot = "3.2.1"
-spring-dependency = "1.1.4"
+spring-boot = "3.3.3"
+spring-dependency = "1.1.6"
 spotless = "6.25.0"
 springdoc = "2.3.0"
+
+
+
+
+
+
 jackson = "2.15.3"
 flyway = "9.17.0"
 jooq = "3.19.1"
@@ -27,7 +33,7 @@ gradle-properties = "1.5.2"
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency = { id = "io.spring.dependency-management", version.ref = "spring-dependency" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+#kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 jooq = { id = "nu.studer.jooq", version.ref = "gradle-jooq" }
@@ -56,8 +62,6 @@ junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", vers
 testcontainers-junit = { module = "org.testcontainers:junit-jupiter" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
 
-netty-all = { module = "io.netty:netty-all", version = "4.1.108.Final" }
-netty-resolver-dns-native-macos = { module = "io.netty:netty-resolver-dns-native-macos", version = "4.1.108.Final" }
 spring-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot" }
 spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
 spring-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq", version.ref = "spring-boot" }
@@ -100,7 +104,6 @@ hawtio = { module = "io.hawt:hawtio-springboot", version.ref = "hawtio" }
 hawtio-local-jvm-mbean = { module = "io.hawt:hawtio-local-jvm-mbean", version.ref = "hawtio" }
 hawtio-log = { module = "io.hawt:hawtio-log", version.ref = "hawtio" }
 hawtio-log-logback = { module = "io.hawt:hawtio-log-logback", version.ref = "hawtio" }
-#camel-management-starter = { module = "org.apache.camel.springboot:camel-management-starter", version = "4.6.0" }
 camel-spring-boot-xml-starter = { module = "org.apache.camel.springboot:camel-spring-boot-xml-starter", version = "4.6.0" }
 
 
