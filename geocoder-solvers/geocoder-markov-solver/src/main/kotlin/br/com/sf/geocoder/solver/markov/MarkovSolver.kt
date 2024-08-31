@@ -24,6 +24,7 @@ class MarkovSolver : Solver() {
 					initialSolution.problem,
 					coordinate,
 				)
+
 			send(result)
 			close()
 		}

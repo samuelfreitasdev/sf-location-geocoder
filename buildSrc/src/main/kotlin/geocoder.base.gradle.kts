@@ -21,6 +21,9 @@ java {
 
 dependencies {
     implementation(libs.bundles.kotlin)
+
+	testImplementation(libs.kotlin.coroutines.test)
+	testImplementation(libs.bundles.junit)
 }
 
 tasks {
