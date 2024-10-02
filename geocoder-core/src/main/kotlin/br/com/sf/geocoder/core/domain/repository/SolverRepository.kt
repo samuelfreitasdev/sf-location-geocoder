@@ -49,12 +49,4 @@ class SolverRepository(
 			uuid,
 		)
 	}
-
-// 	suspend fun currentDetailedSolution(problemId: Long): GeocoderDetailedSolution? {
-// 		return vrpProblemPort.getMatrixById(problemId)?.let { currentMatrix ->
-// 			vrpSolverSolutionPort.currentSolutionRequest(problemId)?.let { solutionRequest ->
-// 				VrpDetailedSolution(solutionRequest.solution, currentMatrix)
-// 			}
-// 		}
-// 	}
 }
